@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>嘉義老屋咖啡廳探訪記</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream:       #F5EED8;
+    --parchment:   #EDE0C0;
+    --tan:         #D6C49A;
+    --warm-brown:  #A07850;
+    --coffee:      #6B4226;
+    --espresso:    #3E2010;
+    --ink:         #1E0F00;
+    --sage:        #8A9A74;
+    --rust:        #B05030;
+    --mist:        #C8B89A;
+    --paper:       #FAF4E4;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--espresso);
+    font-family: 'Noto Serif TC', 'Shippori Mincho', serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* Geometric Showa border pattern */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--coffee) 0px, var(--coffee) 12px,
+      var(--warm-brown) 12px, var(--warm-brown) 24px,
+      var(--tan) 24px, var(--tan) 36px,
+      var(--warm-brown) 36px, var(--warm-brown) 48px
+    );
+    z-index: 999;
+  }
+
+  /* ── Page layout ─────────────────────────────── */
+  .page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  /* ── Header ──────────────────────────────────── */
+  .site-header {
+    text-align: center;
+    margin-bottom: 52px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .header-kamon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    opacity: 0.85;
+  }
+
+  .site-title {
+    font-family: 'Shippori Mincho', 'Noto Serif TC', serif;
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 600;
+    color: var(--coffee);
+    letter-spacing: 0.18em;
+    line-height: 1.4;
+  }
+
+  .site-subtitle {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--warm-brown);
+    letter-spacing: 0.25em;
+    font-weight: 400;
+  }
+
+  .header-rule {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 22px;
+    justify-content: center;
+  }
+  .header-rule span {
+    width: 60px;
+    height: 1px;
+    background: var(--tan);
+  }
+  .header-rule svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--warm-brown);
+    opacity: 0.7;
+  }
+
+  /* ── Form card ───────────────────────────────── */
+  .form-wrap {
+    background: var(--paper);
+    border: 1px solid var(--tan);
+    border-radius: 2px;
+    padding: 36px 36px 40px;
+    position: relative;
+    box-shadow: 4px 4px 0 var(--parchment), 8px 8px 0 var(--tan);
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+
+  /* Corner marks */
+  .form-wrap::before, .form-wrap::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: var(--coffee);
+    border-style: solid;
+    opacity: 0.35;
+  }
+  .form-wrap::before { top: 10px; left: 10px; border-width: 2px 0 0 2px; }
+  .form-wrap::after  { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+
+  /* ── Progress dots ───────────────────────────── */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+  .p-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--tan);
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--mist);
+    font-weight: 500;
+    transition: all 0.35s ease;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0;
+  }
+  .p-dot.done {
+    background: var(--coffee);
+    border-color: var(--coffee);
+    color: var(--cream);
+  }
+  .p-line {
+    flex: 1;
+    height: 1px;
+    background: var(--tan);
+    max-width: 40px;
+  }
+
+  /* ── Field groups ────────────────────────────── */
+  .field {
+    margin-bottom: 28px;
+  }
+
+  .field-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .field-num {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--warm-brown);
+    letter-spacing: 0.12em;
+    opacity: 0.7;
+  }
+
+  label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--coffee);
+    letter-spacing: 0.1em;
+  }
+
+  .field-hint {
+    font-size: 11px;
+    color: var(--warm-brown);
+    opacity: 0.75;
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+
+  input[type=text], textarea {
+    display: block;
+    width: 100%;
+    background: var(--cream);
+    border: 1px solid var(--tan);
+    border-radius: 1px;
+    padding: 10px 14px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    color: var(--espresso);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-top: 8px;
+  }
+  input[type=text]:focus, textarea:focus {
+    border-color: var(--coffee);
+    box-shadow: 0 0 0 3px rgba(107,66,38,0.1);
+  }
+  input[type=text]::placeholder, textarea::placeholder {
+    color: var(--mist);
+    font-size: 13px;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 88px;
+    line-height: 1.8;
+  }
+
+  /* ── Pill buttons (parking) ──────────────────── */
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .pill-btn {
+    padding: 7px 14px;
+    border: 1px solid var(--tan);
+    background: var(--cream);
+    color: var(--espresso);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 13px;
+    border-radius: 1px;
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.04em;
+  }
+  .pill-btn:hover { border-color: var(--warm-brown); background: var(--parchment); }
+  .pill-btn.selected {
+    background: var(--coffee);
+    border-color: var(--coffee);
+    color: var(--cream);
+  }
+  .pill-label {
+    margin-top: 7px;
+    font-size: 11px;
+    color: var(--warm-brown);
+    letter-spacing: 0.08em;
+    min-height: 16px;
+    opacity: 0.8;
+  }
+
+  /* ── Yen price buttons ───────────────────────── */
+  .yen-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .yen-btn {
+    width: 48px;
+    height: 38px;
+    border: 1px solid var(--tan);
+    background: var(--cream);
+    border-radius: 1px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14px;
+    color: var(--mist);
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.18s;
+  }
+  .yen-btn:hover { border-color: var(--warm-brown); background: var(--parchment); }
+  .yen-btn.lit {
+    background: #EEF0E4;
+    border-color: var(--sage);
+    color: #526040;
+    font-weight: 600;
+  }
+
+  /* ── Return slider ───────────────────────────── */
+  .slider-wrap { margin-top: 10px; }
+  input[type=range] {
+    width: 100%;
+    accent-color: var(--coffee);
+    cursor: pointer;
+    height: 4px;
+  }
+  .slider-track-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 10px;
+    color: var(--mist);
+    letter-spacing: 0.08em;
+  }
+  .return-display {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--coffee);
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+
+  /* ── Card meta grid ──────────────────────────── */
+  .card-meta-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--tan);
+    border: 1px solid var(--tan);
+    margin: 18px 0;
+  }
+  .card-meta-item {
+    background: var(--paper);
+    padding: 10px 12px;
+  }
+  .card-meta-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--warm-brown);
+    opacity: 0.65;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .card-meta-value {
+    font-size: 13px;
+    color: var(--espresso);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Stars ───────────────────────────────────── */
+  .star-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .star {
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    border: 1px solid var(--tan);
+    background: var(--cream);
+    border-radius: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--mist);
+    transition: all 0.18s ease;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .star:hover { border-color: var(--warm-brown); background: var(--parchment); }
+  .star.lit {
+    color: var(--rust);
+    background: #FAF0E8;
+    border-color: var(--rust);
+  }
+  .star-label {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--warm-brown);
+    letter-spacing: 0.08em;
+    min-height: 16px;
+  }
+
+  /* ── Tags ────────────────────────────────────── */
+  .tag-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 1px solid var(--tan);
+    color: var(--warm-brown);
+    background: var(--parchment);
+    border-radius: 1px;
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+  }
+  .tag.auto {
+    background: #EEF0E8;
+    border-color: var(--sage);
+    color: #526040;
+  }
+
+  /* ── Divider ─────────────────────────────────── */
+  .field-divider {
+    border: none;
+    border-top: 1px dashed var(--tan);
+    margin: 28px 0;
+    opacity: 0.6;
+  }
+
+  /* ── Submit button ───────────────────────────── */
+  .btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: var(--coffee);
+    color: var(--cream);
+    border: none;
+    border-radius: 1px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-submit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  .btn-submit:hover { background: var(--espresso); }
+  .btn-submit:hover::after { transform: translateX(100%); }
+  .btn-submit:active { transform: scale(0.99); }
+
+  /* ── Result card ─────────────────────────────── */
+  .result-wrap {
+    display: none;
+    margin-top: 40px;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .result-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--coffee);
+    letter-spacing: 0.15em;
+  }
+  .btn-reset {
+    font-size: 11px;
+    color: var(--warm-brown);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-decoration: underline;
+    font-family: inherit;
+    opacity: 0.75;
+  }
+  .btn-reset:hover { opacity: 1; }
+
+  .result-card {
+    background: var(--paper);
+    border: 1px solid var(--tan);
+    border-radius: 2px;
+    padding: 28px 28px 24px;
+    box-shadow: 3px 3px 0 var(--parchment);
+  }
+
+  .card-name {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 600;
+    color: var(--coffee);
+    letter-spacing: 0.15em;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .card-date {
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.12em;
+    margin-bottom: 18px;
+  }
+
+  .card-stars-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .card-stars {
+    font-size: 18px;
+    color: var(--rust);
+    letter-spacing: 2px;
+  }
+  .card-rating-num {
+    font-size: 12px;
+    color: var(--warm-brown);
+    opacity: 0.8;
+  }
+
+  .card-section {
+    margin-bottom: 18px;
+  }
+  .card-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--warm-brown);
+    opacity: 0.65;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--tan);
+    opacity: 0.5;
+  }
+  .card-section-body {
+    font-size: 14px;
+    color: var(--espresso);
+    line-height: 1.8;
+    letter-spacing: 0.04em;
+  }
+
+  .soul-block {
+    background: var(--parchment);
+    border-left: 3px solid var(--warm-brown);
+    padding: 10px 14px;
+    border-radius: 0 1px 1px 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--coffee);
+    font-style: italic;
+  }
+
+  .card-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--tan);
+  }
+  .card-tag {
+    font-size: 11px;
+    color: var(--warm-brown);
+    letter-spacing: 0.06em;
+    opacity: 0.8;
+  }
+  .card-tag + .card-tag::before {
+    content: ' · ';
+    margin-right: 6px;
+  }
+
+  /* ── Copy / share row ────────────────────────── */
+  .action-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .btn-action {
+    flex: 1;
+    padding: 10px;
+    background: none;
+    border: 1px solid var(--tan);
+    color: var(--coffee);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: all 0.18s;
+  }
+  .btn-action:hover {
+    background: var(--parchment);
+    border-color: var(--warm-brown);
+  }
+  .btn-action.primary {
+    background: var(--coffee);
+    border-color: var(--coffee);
+    color: var(--cream);
+  }
+  .btn-action.primary:hover { background: var(--espresso); }
+  .copy-ok {
+    font-size: 11px;
+    color: var(--sage);
+    letter-spacing: 0.1em;
+    display: none;
+    align-self: center;
+    margin-left: 4px;
+  }
+
+  /* ── Footer ──────────────────────────────────── */
+  .site-footer {
+    text-align: center;
+    margin-top: 52px;
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.18em;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .footer-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--tan);
+    margin: 0 auto 14px;
+  }
+
+  /* ── Animations ──────────────────────────────── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ──────────────────────────────── */
+  @media (max-width: 480px) {
+    .page { padding: 50px 14px 60px; }
+    .form-wrap { padding: 24px 18px 28px; }
+    .result-card { padding: 20px 16px 18px; }
+    .action-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <header class="site-header">
+    <!-- Kamon-style SVG emblem -->
+    <svg class="header-kamon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" fill="none" stroke="#6B4226" stroke-width="1.2"/>
+      <circle cx="32" cy="32" r="24" fill="none" stroke="#6B4226" stroke-width="0.7" stroke-dasharray="3 3"/>
+      <!-- Coffee cup silhouette -->
+      <path d="M22 26 h20 l-3 14 H25 Z" fill="none" stroke="#6B4226" stroke-width="1.3" stroke-linejoin="round"/>
+      <path d="M42 29 q5 0 5 4 q0 4-5 4" fill="none" stroke="#6B4226" stroke-width="1.3"/>
+      <path d="M27 26 q0-5 5-5 q5 0 5 5" fill="none" stroke="#6B4226" stroke-width="1"/>
+      <path d="M32 21 q0-3 0-5" stroke="#A07850" stroke-width="1" stroke-linecap="round"/>
+      <!-- Small decorative dots -->
+      <circle cx="32" cy="8" r="1.5" fill="#A07850" opacity="0.6"/>
+      <circle cx="32" cy="56" r="1.5" fill="#A07850" opacity="0.6"/>
+      <circle cx="8" cy="32" r="1.5" fill="#A07850" opacity="0.6"/>
+      <circle cx="56" cy="32" r="1.5" fill="#A07850" opacity="0.6"/>
+    </svg>
+
+    <h1 class="site-title">嘉義老屋咖啡廳<br>探訪記</h1>
+    <p class="site-subtitle">CHIAYI OLD HOUSE CAFÉ JOURNAL</p>
+    <div class="header-rule">
+      <span></span>
+      <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="7,1 8.5,5.5 13,5.5 9.2,8.4 10.6,13 7,10.2 3.4,13 4.8,8.4 1,5.5 5.5,5.5"/>
+      </svg>
+      <span></span>
+    </div>
+  </header>
+
+  <!-- Form -->
+  <main>
+    <div class="form-wrap" id="form-wrap">
+
+      <!-- Progress -->
+      <div class="progress-row" id="progress-row">
+        <div class="p-dot" id="dot0">一</div>
+        <div class="p-line"></div>
+        <div class="p-dot" id="dot1">二</div>
+        <div class="p-line"></div>
+        <div class="p-dot" id="dot2">三</div>
+        <div class="p-line"></div>
+        <div class="p-dot" id="dot3">四</div>
+        <div class="p-line"></div>
+        <div class="p-dot" id="dot4">五</div>
+        <div class="p-line"></div>
+        <div class="p-dot" id="dot5">六</div>
+        <div class="p-line"></div>
+        <div class="p-dot" id="dot6">七</div>
+        <div class="p-line"></div>
+        <div class="p-dot" id="dot7">八</div>
+      </div>
+
+      <!-- Field 1 -->
+      <div class="field">
+        <div class="field-head">
+          <span class="field-num">01</span>
+          <label for="f-name">店名</label>
+        </div>
+        <p class="field-hint">咖啡廳的名字，或暱稱也可以</p>
+        <input type="text" id="f-name" placeholder="例：方宅咖啡、木更咖啡、鹿早茶屋" autocomplete="off" oninput="refreshDots()" />
+      </div>
+
+      <!-- Field 2 -->
+      <div class="field">
+        <div class="field-head">
+          <span class="field-num">02</span>
+          <label for="f-dessert">招牌甜點</label>
+        </div>
+        <p class="field-hint">輸入後自動判斷類型並貼標籤</p>
+        <input type="text" id="f-dessert" placeholder="例：焦糖布丁、戚風蛋糕、鹽味可頌" autocomplete="off" oninput="updateTags(); refreshDots()" />
+        <div class="tag-wrap" id="tag-wrap">
+          <span class="tag"># 嘉義老屋</span>
+          <span class="tag"># 老屋咖啡廳</span>
+        </div>
+      </div>
+
+      <hr class="field-divider" />
+
+      <!-- Field 3 -->
+      <div class="field">
+        <div class="field-head">
+          <span class="field-num">03</span>
+          <label>評分</label>
+        </div>
+        <p class="field-hint">點選星星給分</p>
+        <div class="star-row" id="star-row">
+          <div class="star" data-v="1" onclick="setStars(1)" role="button" aria-label="1 星">★</div>
+          <div class="star" data-v="2" onclick="setStars(2)" role="button" aria-label="2 星">★</div>
+          <div class="star" data-v="3" onclick="setStars(3)" role="button" aria-label="3 星">★</div>
+          <div class="star" data-v="4" onclick="setStars(4)" role="button" aria-label="4 星">★</div>
+          <div class="star" data-v="5" onclick="setStars(5)" role="button" aria-label="5 星">★</div>
+        </div>
+        <p class="star-label" id="star-label">尚未評分</p>
+      </div>
+
+      <hr class="field-divider" />
+
+      <!-- Field 4: Parking -->
+      <div class="field">
+        <div class="field-head">
+          <span class="field-num">04</span>
+          <label>停車友善性</label>
+        </div>
+        <p class="field-hint">附近停車的難易程度</p>
+        <div class="pill-row" id="parking-row">
+          <button class="pill-btn" data-val="很難停" onclick="selectPill('parking','很難停',this)">😩 很難停</button>
+          <button class="pill-btn" data-val="需要繞" onclick="selectPill('parking','需要繞',this)">🔄 需要繞</button>
+          <button class="pill-btn" data-val="尚可"   onclick="selectPill('parking','尚可',this)">🙂 尚可</button>
+          <button class="pill-btn" data-val="好停"   onclick="selectPill('parking','好停',this)">✅ 好停</button>
+          <button class="pill-btn" data-val="有專屬停車場" onclick="selectPill('parking','有專屬停車場',this)">🅿 專屬車位</button>
+        </div>
+        <p class="pill-label" id="parking-label">尚未選擇</p>
+      </div>
+
+      <!-- Field 5: Price -->
+      <div class="field">
+        <div class="field-head">
+          <span class="field-num">05</span>
+          <label>消費價位</label>
+        </div>
+        <p class="field-hint">每人平均消費落點</p>
+        <div class="yen-row" id="price-row">
+          <button class="yen-btn" data-v="1" onclick="setPrice(1)" aria-label="平價">¥</button>
+          <button class="yen-btn" data-v="2" onclick="setPrice(2)" aria-label="中等">¥</button>
+          <button class="yen-btn" data-v="3" onclick="setPrice(3)" aria-label="稍貴">¥</button>
+          <button class="yen-btn" data-v="4" onclick="setPrice(4)" aria-label="高價">¥</button>
+        </div>
+        <p class="pill-label" id="price-label">尚未選擇</p>
+      </div>
+
+      <hr class="field-divider" />
+
+      <!-- Field 6: Return intent -->
+      <div class="field">
+        <div class="field-head">
+          <span class="field-num">06</span>
+          <label for="f-return">整體回訪意願</label>
+        </div>
+        <p class="field-hint">下次還會特地來嗎？</p>
+        <div class="slider-wrap">
+          <input type="range" id="f-return" min="0" max="100" value="50" step="1" oninput="updateReturn()" />
+          <div class="slider-track-label">
+            <span>無緣再來</span>
+            <span>還好</span>
+            <span>一定再訪</span>
+          </div>
+        </div>
+        <p class="return-display" id="return-display">50 / 100 — 還好，也許會再來</p>
+      </div>
+
+      <hr class="field-divider" />
+
+      <!-- Field 7 -->
+      <div class="field">
+        <div class="field-head">
+          <span class="field-num">07</span>
+          <label for="f-soul">老屋靈魂 ✦</label>
+        </div>
+        <p class="field-hint">這間店最迷人的建築或空間元素是什麼？</p>
+        <input type="text" id="f-soul" placeholder="例：陡峭木樓梯、磨石子地板、昭和風窗花、格狀木窗" autocomplete="off" oninput="refreshDots()" />
+      </div>
+
+      <!-- Field 8 -->
+      <div class="field">
+        <div class="field-head">
+          <span class="field-num">08</span>
+          <label for="f-note">造訪筆記</label>
+        </div>
+        <p class="field-hint">氛圍、服務、任何印象深刻的細節</p>
+        <textarea id="f-note" placeholder="午後陽光從昭和窗花透進來，空氣裡有淡淡咖啡香與舊木頭的氣息…" oninput="refreshDots()"></textarea>
+      </div>
+
+      <button class="btn-submit" onclick="generate()">記 錄 此 行</button>
+    </div>
+
+    <!-- Result -->
+    <div class="result-wrap" id="result-wrap">
+      <div class="result-header">
+        <span class="result-title">探訪記錄</span>
+        <button class="btn-reset" onclick="reset()">重新填寫</button>
+      </div>
+      <div class="result-card" id="result-card">
+        <div class="card-name" id="r-name"></div>
+        <div class="card-date" id="r-date"></div>
+
+        <div class="card-stars-row">
+          <span class="card-stars" id="r-stars"></span>
+          <span class="card-rating-num" id="r-rating-num"></span>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-label">招牌甜點</div>
+          <div class="card-section-body" id="r-dessert"></div>
+        </div>
+
+        <div class="card-meta-row">
+          <div class="card-meta-item">
+            <div class="card-meta-label">停車友善</div>
+            <div class="card-meta-value" id="r-parking">—</div>
+          </div>
+          <div class="card-meta-item">
+            <div class="card-meta-label">消費價位</div>
+            <div class="card-meta-value" id="r-price">—</div>
+          </div>
+          <div class="card-meta-item">
+            <div class="card-meta-label">回訪意願</div>
+            <div class="card-meta-value" id="r-return">—</div>
+          </div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-label">老屋靈魂</div>
+          <div class="soul-block" id="r-soul"></div>
+        </div>
+
+        <div class="card-section">
+          <div class="card-section-label">造訪筆記</div>
+          <div class="card-section-body" id="r-note"></div>
+        </div>
+
+        <div class="card-tags-row" id="r-tags"></div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-action primary" onclick="copyCard()">複製筆記文字</button>
+        <button class="btn-action" onclick="printCard()">列印 / 存成 PDF</button>
+        <span class="copy-ok" id="copy-ok">✓ 已複製</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-divider"></div>
+    <p>嘉義老屋咖啡廳探訪記 &nbsp;·&nbsp; Chiayi Café Journal</p>
+  </footer>
+
+</div>
+
+<script>
+  let rating = 0;
+  let parking = '';
+  let priceLevel = 0;
+  let returnScore = 50;
+
+  const STAR_LABELS = ['', '還好，有緣再來', '普通，甜點還不錯', '不錯，值得再訪', '很喜歡，推薦給朋友', '完美，已加入口袋名單 ★'];
+  const PRICE_LABELS = ['', '平價 · 人均 150 以下', '中等 · 人均 150–300', '稍貴 · 人均 300–500', '高價 · 人均 500 以上'];
+  const PRICE_STR   = ['', '¥', '¥¥', '¥¥¥', '¥¥¥¥'];
+
+  function returnLabel(v) {
+    if (v <= 20)  return `${v} / 100 — 不太想再來了`;
+    if (v <= 40)  return `${v} / 100 — 可能不會特地來`;
+    if (v <= 60)  return `${v} / 100 — 還好，也許會再來`;
+    if (v <= 80)  return `${v} / 100 — 很想再來`;
+    return `${v} / 100 — 已排入下次行程 ✦`;
+  }
+
+  const AUTO_TAGS = {
+    '布丁':  ['# 焦糖布丁', '# 布丁控'],
+    '戚風':  ['# 戚風蛋糕', '# 雲朵口感'],
+    '可頌':  ['# 可頌控', '# 奶油香'],
+    '磅蛋糕':['# 磅蛋糕', '# 英式下午茶'],
+    '起司':  ['# 起司蛋糕', '# 乳酪控'],
+    '塔':    ['# 甜塔', '# 法式甜點'],
+    '瑪德蓮':['# 瑪德蓮', '# 法式小點'],
+    '司康':  ['# 司康', '# 英式下午茶'],
+  };
+
+  function setStars(n) {
+    rating = n;
+    document.querySelectorAll('.star').forEach(s => {
+      s.classList.toggle('lit', parseInt(s.dataset.v) <= n);
+    });
+    document.getElementById('star-label').textContent = STAR_LABELS[n];
+    refreshDots();
+  }
+
+  function selectPill(group, val, el) {
+    parking = val;
+    document.querySelectorAll('#parking-row .pill-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('parking-label').textContent = val;
+    refreshDots();
+  }
+
+  function setPrice(n) {
+    priceLevel = n;
+    document.querySelectorAll('.yen-btn').forEach(b => {
+      b.classList.toggle('lit', parseInt(b.dataset.v) <= n);
+    });
+    document.getElementById('price-label').textContent = PRICE_LABELS[n];
+    refreshDots();
+  }
+
+  function updateReturn() {
+    returnScore = parseInt(document.getElementById('f-return').value);
+    document.getElementById('return-display').textContent = returnLabel(returnScore);
+    refreshDots();
+  }
+
+  function computeTags(dessert) {
+    const base = ['# 嘉義老屋', '# 老屋咖啡廳'];
+    const extra = [];
+    Object.entries(AUTO_TAGS).forEach(([kw, tags]) => {
+      if (dessert.includes(kw)) extra.push(...tags);
+    });
+    return { base, extra };
+  }
+
+  function updateTags() {
+    const dessert = document.getElementById('f-dessert').value.trim();
+    const { base, extra } = computeTags(dessert);
+    const wrap = document.getElementById('tag-wrap');
+    wrap.innerHTML = [
+      ...base.map(t => `<span class="tag">${t}</span>`),
+      ...extra.map(t => `<span class="tag auto">${t}</span>`)
+    ].join('');
+  }
+
+  function refreshDots() {
+    const vals = [
+      document.getElementById('f-name').value.trim(),
+      document.getElementById('f-dessert').value.trim(),
+      rating > 0 ? 'ok' : '',
+      parking,
+      priceLevel > 0 ? 'ok' : '',
+      'ok', // slider always has a value
+      document.getElementById('f-soul').value.trim(),
+      document.getElementById('f-note').value.trim(),
+    ];
+    vals.forEach((v, i) => {
+      const el = document.getElementById('dot' + i);
+      if (el) el.classList.toggle('done', !!v);
+    });
+  }
+  // Init slider dot
+  document.addEventListener('DOMContentLoaded', refreshDots);
+  refreshDots();
+
+  function today() {
+    const d = new Date();
+    return `${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日`;
+  }
+
+  function starsStr(n) {
+    return '★'.repeat(n) + '☆'.repeat(5 - n);
+  }
+
+  function generate() {
+    const name    = document.getElementById('f-name').value.trim()    || '（未命名）';
+    const dessert = document.getElementById('f-dessert').value.trim() || '（未填）';
+    const soul    = document.getElementById('f-soul').value.trim()    || '（未填）';
+    const note    = document.getElementById('f-note').value.trim()    || '（未填）';
+
+    document.getElementById('r-name').textContent        = name;
+    document.getElementById('r-date').textContent        = today();
+    document.getElementById('r-stars').textContent       = starsStr(rating);
+    document.getElementById('r-rating-num').textContent  = rating ? `${rating} / 5` : '尚未評分';
+    document.getElementById('r-dessert').textContent     = dessert;
+    document.getElementById('r-soul').textContent        = soul;
+    document.getElementById('r-note').textContent        = note;
+
+    document.getElementById('r-parking').textContent = parking || '—';
+    document.getElementById('r-price').textContent   = priceLevel ? `${PRICE_STR[priceLevel]}  ${PRICE_LABELS[priceLevel]}` : '—';
+    document.getElementById('r-return').textContent  = returnLabel(returnScore);
+
+    const { base, extra } = computeTags(dessert);
+    const allTags = [...base, ...extra];
+    document.getElementById('r-tags').innerHTML = allTags.map(t => `<span class="card-tag">${t}</span>`).join('');
+
+    const rw = document.getElementById('result-wrap');
+    rw.style.display = 'block';
+    setTimeout(() => rw.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+
+  function copyCard() {
+    const name    = document.getElementById('r-name').textContent;
+    const date    = document.getElementById('r-date').textContent;
+    const stars   = document.getElementById('r-stars').textContent;
+    const rating_ = document.getElementById('r-rating-num').textContent;
+    const dessert = document.getElementById('r-dessert').textContent;
+    const pkText  = document.getElementById('r-parking').textContent;
+    const prText  = document.getElementById('r-price').textContent;
+    const rtText  = document.getElementById('r-return').textContent;
+    const soul    = document.getElementById('r-soul').textContent;
+    const note    = document.getElementById('r-note').textContent;
+    const tags    = Array.from(document.querySelectorAll('.card-tag')).map(t => t.textContent).join(' ');
+
+    const text = [
+      name, date, '',
+      `整體評分：${stars}（${rating_}）`,
+      `停車友善：${pkText}`,
+      `消費價位：${prText}`,
+      `回訪意願：${rtText}`, '',
+      `招牌甜點\n${dessert}`, '',
+      `老屋靈魂\n${soul}`, '',
+      `造訪筆記\n${note}`, '',
+      tags
+    ].join('\n');
+
+    navigator.clipboard.writeText(text).then(() => {
+      const el = document.getElementById('copy-ok');
+      el.style.display = 'inline';
+      setTimeout(() => el.style.display = 'none', 2200);
+    });
+  }
+
+  function printCard() { window.print(); }
+
+  function reset() {
+    ['f-name','f-dessert','f-soul','f-note'].forEach(id => document.getElementById(id).value = '');
+    rating = 0; parking = ''; priceLevel = 0; returnScore = 50;
+    document.querySelectorAll('.star').forEach(s => s.classList.remove('lit'));
+    document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.yen-btn').forEach(b => b.classList.remove('lit'));
+    document.getElementById('star-label').textContent    = '尚未評分';
+    document.getElementById('parking-label').textContent = '尚未選擇';
+    document.getElementById('price-label').textContent   = '尚未選擇';
+    document.getElementById('f-return').value = 50;
+    document.getElementById('return-display').textContent = returnLabel(50);
+    updateTags();
+    refreshDots();
+    document.getElementById('result-wrap').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* Print styles */
+  const printCSS = `
+    @media print {
+      body::before, body::after { display: none; }
+      .form-wrap, .site-footer, .action-row, .btn-reset, .result-header p { display: none !important; }
+      .result-wrap { display: block !important; margin: 0; }
+      .result-card { box-shadow: none; border: 1px solid #ccc; }
+      .page { padding: 20px; }
+    }
+  `;
+  const style = document.createElement('style');
+  style.textContent = printCSS;
+  document.head.appendChild(style);
+</script>
+
+</body>
+</html>
