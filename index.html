@@ -55,17 +55,13 @@ body::after {
 
 /* ── Layout ─────────────────────────────────────── */
 .layout {
-  display: flex;
   min-height: 100vh;
-  align-items: flex-start;
 }
 
 .page {
-  flex: 1;
   max-width: 700px;
   margin: 0 auto;
   padding: 60px 24px 80px;
-  transition: padding-right 0.4s ease;
 }
 
 /* ── Sidebar ────────────────────────────────────── */
@@ -74,14 +70,16 @@ body::after {
   min-height: 100vh;
   background: var(--paper);
   border-left: 1px solid var(--tan);
-  padding: 60px 0 40px;
-  flex-shrink: 0;
-  position: sticky;
+  padding: 54px 0 40px;
+  position: fixed;
   top: 0;
+  right: 0;
   max-height: 100vh;
   overflow-y: auto;
   transform: translateX(100%);
   transition: transform 0.4s ease;
+  z-index: 990;
+  box-shadow: -4px 0 20px rgba(62,32,16,0.10);
 }
 .sidebar.open {
   transform: translateX(0);
@@ -90,6 +88,57 @@ body::after {
 .sidebar-inner {
   padding: 0 20px;
 }
+
+/* ── Sidebar tabs ───────────────────────────────── */
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--tan);
+  margin: 0 -20px 16px;
+  padding: 0 20px;
+}
+.sidebar-tab {
+  flex: 1;
+  padding: 8px 4px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--mist);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.sidebar-tab:hover { color: var(--warm-brown); }
+.sidebar-tab.active {
+  color: var(--coffee);
+  border-bottom-color: var(--coffee);
+}
+.sidebar-tab-badge {
+  background: var(--parchment);
+  border: 1px solid var(--tan);
+  border-radius: 10px;
+  font-size: 10px;
+  padding: 0 6px;
+  color: var(--coffee);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.sidebar-tab.active .sidebar-tab-badge {
+  background: var(--coffee);
+  border-color: var(--coffee);
+  color: var(--cream);
+}
+
+/* ── Tab panels ─────────────────────────────────── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
 .sidebar-title {
   font-size: 11px;
@@ -178,6 +227,61 @@ body::after {
   transition: all 0.15s;
 }
 .hi-delete:hover { color: var(--rust); background: rgba(176,80,48,0.1); }
+
+.hi-fav {
+  position: absolute;
+  top: 8px; right: 28px;
+  width: 18px; height: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--mist);
+  font-size: 13px;
+  line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  transition: all 0.15s;
+}
+.hi-fav:hover { color: var(--rust); }
+.hi-fav.favorited { color: var(--rust); }
+
+.fav-empty {
+  font-size: 12px;
+  color: var(--mist);
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.fav-item {
+  background: #FFF8F4;
+  border: 1px solid #E8C8B8;
+  border-radius: 1px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  margin-bottom: 8px;
+}
+.fav-item:hover { border-color: var(--rust); background: #FFF0E8; }
+.fav-item .hi-name { color: var(--rust); }
+.fav-unfav {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 18px; height: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--rust);
+  font-size: 13px;
+  line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  transition: all 0.15s;
+  opacity: 0.5;
+}
+.fav-unfav:hover { opacity: 1; }
 
 .sidebar-sep {
   height: 1px;
@@ -636,16 +740,35 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-inner">
-      <div class="sidebar-title">
-        <span>歷史探訪清單</span>
-        <span class="sidebar-count" id="sidebar-count">0</span>
+
+      <!-- Tabs -->
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" id="tab-history" onclick="switchTab('history')">
+          探訪清單
+          <span class="sidebar-tab-badge" id="tab-history-badge">0</span>
+        </button>
+        <button class="sidebar-tab" id="tab-fav" onclick="switchTab('fav')">
+          ♥ 我的最愛
+          <span class="sidebar-tab-badge" id="tab-fav-badge">0</span>
+        </button>
       </div>
-      <div id="history-list-wrap">
-        <p class="history-empty" id="history-empty">還沒有探訪記錄<br>記錄第一間吧 ☕</p>
-        <div class="history-list" id="history-list"></div>
+
+      <!-- Panel: 探訪清單 -->
+      <div class="tab-panel active" id="panel-history">
+        <div id="history-list-wrap">
+          <p class="history-empty" id="history-empty">還沒有探訪記錄<br>記錄第一間吧 ☕</p>
+          <div class="history-list" id="history-list"></div>
+        </div>
+        <div class="sidebar-sep"></div>
+        <button class="btn-clear-all" onclick="clearAll()">清除所有記錄</button>
       </div>
-      <div class="sidebar-sep"></div>
-      <button class="btn-clear-all" onclick="clearAll()">清除所有記錄</button>
+
+      <!-- Panel: 我的最愛 -->
+      <div class="tab-panel" id="panel-fav">
+        <p class="fav-empty" id="fav-empty">還沒有收藏的咖啡廳<br>點擊記錄卡上的 ♡ 收藏 ☕</p>
+        <div id="fav-list"></div>
+      </div>
+
     </div>
   </aside>
 </div>
@@ -791,6 +914,53 @@ function generate() {
   renderResult(entry);
 }
 
+// ── Favorites ──────────────────────────────────────
+const FAV_KEY = 'chiayi_cafe_favs';
+
+function loadFavIds() {
+  try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; }
+  catch(e) { return []; }
+}
+
+function toggleFav(id) {
+  let favIds = loadFavIds();
+  const idx  = favIds.indexOf(id);
+  if (idx >= 0) favIds.splice(idx, 1);
+  else favIds.unshift(id);
+  localStorage.setItem(FAV_KEY, JSON.stringify(favIds));
+  renderHistorySidebar();
+}
+
+function renderFavList() {
+  const favIds  = loadFavIds();
+  const entries = loadEntries().filter(e => favIds.includes(e.id));
+  document.getElementById('tab-fav-badge').textContent = entries.length;
+  document.getElementById('fav-empty').style.display = entries.length ? 'none' : 'block';
+  const list = document.getElementById('fav-list');
+  list.innerHTML = entries.map(e => {
+    const stars = starsStr(e.rating).substring(0,5);
+    return '<div class="fav-item" onclick="viewEntry('+e.id+')">'
+         + '<div class="hi-name" style="padding-right:24px">'+escHtml(e.name)+'</div>'
+         + '<div class="hi-meta">'
+         + '<span class="hi-stars" style="color:var(--rust)">'+stars+'</span>'
+         + '<span>'+escHtml(e.date)+'</span>'
+         + '</div>'
+         + '<button class="fav-unfav" onclick="event.stopPropagation();toggleFav('+e.id+')" aria-label="取消收藏" title="取消收藏">♥</button>'
+         + '</div>';
+  }).join('');
+}
+
+// ── Tab switching ──────────────────────────────────
+let currentTab = 'history';
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-history').classList.toggle('active', tab === 'history');
+  document.getElementById('tab-fav').classList.toggle('active', tab === 'fav');
+  document.getElementById('panel-history').classList.toggle('active', tab === 'history');
+  document.getElementById('panel-fav').classList.toggle('active', tab === 'fav');
+}
+
 // ── localStorage ───────────────────────────────────
 const LS_KEY = 'chiayi_cafe_journal';
 
@@ -811,6 +981,9 @@ function saveEntry(entry) {
 function deleteEntry(id) {
   const entries = loadEntries().filter(e => e.id !== id);
   localStorage.setItem(LS_KEY, JSON.stringify(entries));
+  // also remove from favs if present
+  const favIds = loadFavIds().filter(fid => fid !== id);
+  localStorage.setItem(FAV_KEY, JSON.stringify(favIds));
   renderHistorySidebar();
 }
 
@@ -822,23 +995,30 @@ function clearAll() {
 
 function renderHistorySidebar() {
   const entries = loadEntries();
+  const favIds  = loadFavIds();
   const count   = entries.length;
-  document.getElementById('sidebar-count').textContent = count;
+  document.getElementById('tab-history-badge').textContent = count;
   document.getElementById('toggle-badge').textContent  = count;
   document.getElementById('toggle-badge').classList.toggle('show', count > 0);
   document.getElementById('history-empty').style.display = count ? 'none' : 'block';
   const list = document.getElementById('history-list');
   list.innerHTML = entries.map(e => {
-    const stars = starsStr(e.rating).substring(0,5);
+    const stars    = starsStr(e.rating).substring(0,5);
+    const isFav    = favIds.includes(e.id);
+    const favClass = isFav ? 'hi-fav favorited' : 'hi-fav';
+    const favIcon  = isFav ? '♥' : '♡';
     return '<div class="history-item" id="hi-'+e.id+'" onclick="viewEntry('+e.id+')">'
-         + '<div class="hi-name">'+escHtml(e.name)+'</div>'
+         + '<div class="hi-name" style="padding-right:46px">'+escHtml(e.name)+'</div>'
          + '<div class="hi-meta">'
          + '<span class="hi-stars">'+stars+'</span>'
          + '<span>'+escHtml(e.date)+'</span>'
          + '</div>'
+         + '<button class="'+favClass+'" id="fav-btn-'+e.id+'" onclick="event.stopPropagation();toggleFav('+e.id+')" aria-label="收藏">'+favIcon+'</button>'
          + '<button class="hi-delete" onclick="event.stopPropagation();deleteEntry('+e.id+')" aria-label="刪除">×</button>'
          + '</div>';
   }).join('');
+
+  renderFavList();
 }
 
 function viewEntry(id) {
