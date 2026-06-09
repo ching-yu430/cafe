@@ -602,538 +602,11 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
 
 /* ── Footer ─────────────────────────────────────── */
 .site-footer { text-align: center; margin-top: 52px; font-size: 11px; color: var(--mist); letter-spacing: 0.18em; }
-/* ── Added Premium Features ──────────────────────── */
-/* Rating grid & radar preview */
-.rating-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 10px;
-}
-@media (min-width: 600px) {
-  .rating-container {
-    flex-direction: row;
-    align-items: center;
-    gap: 24px;
-  }
-}
-.rating-grid {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-@media (min-width: 400px) {
-  .rating-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 14px 16px;
-  }
-}
-.sub-rating {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.sub-star-row {
-  display: flex;
-  gap: 5px;
-}
-.sub-star {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  border: 1px solid var(--tan);
-  background: var(--cream);
-  border-radius: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  color: var(--mist);
-  transition: all 0.18s ease;
-  user-select: none;
-}
-.sub-star:hover { border-color: var(--warm-brown); background: var(--parchment); }
-.sub-star.lit { color: var(--rust); background: #FAF0E8; border-color: var(--rust); }
-.rating-label-inline {
-  font-size: 11px;
-  color: var(--warm-brown);
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  display: flex;
-  justify-content: space-between;
-}
-.rating-score-num {
-  font-weight: 600;
-  color: var(--coffee);
-}
+.footer-divider { width: 40px; height: 1px; background: var(--tan); margin: 0 auto 14px; }
 
-/* Radar SVG styles */
-.radar-preview {
-  align-self: center;
-  width: 140px;
-  height: 140px;
-  background: var(--paper);
-  border: 1px dashed var(--tan);
-  border-radius: 50%;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 0 10px rgba(62,32,16,0.03);
-}
-.radar-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-.radar-polygon {
-  fill: rgba(176, 80, 48, 0.22);
-  stroke: var(--rust);
-  stroke-width: 1.5;
-  transition: points 0.25s ease-in-out;
-}
-.radar-bg-polygon {
-  fill: none;
-  stroke: var(--tan);
-  stroke-dasharray: 2 2;
-  stroke-width: 0.8;
-  opacity: 0.8;
-}
-.radar-axis {
-  stroke: var(--tan);
-  stroke-width: 0.8;
-  opacity: 0.5;
-}
-.radar-axis-text {
-  font-size: 8.5px;
-  font-family: 'Noto Serif TC', serif;
-  font-weight: 600;
-  fill: var(--coffee);
-  text-anchor: middle;
-  dominant-baseline: middle;
-}
-
-/* Photo upload */
-.upload-zone {
-  border: 1.5px dashed var(--tan);
-  background: var(--cream);
-  border-radius: 1px;
-  padding: 20px 14px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  margin-top: 8px;
-}
-.upload-zone:hover, .upload-zone.dragover {
-  border-color: var(--coffee);
-  background: var(--parchment);
-}
-.upload-icon {
-  font-size: 20px;
-  color: var(--warm-brown);
-  margin-bottom: 4px;
-}
-.upload-text {
-  font-size: 12px;
-  color: var(--coffee);
-  letter-spacing: 0.05em;
-  font-weight: 500;
-}
-.upload-hint {
-  font-size: 10px;
-  color: var(--mist);
-  margin-top: 2px;
-}
-.upload-preview-wrap {
-  display: none;
-  position: relative;
-  margin-top: 10px;
-  border: 1px solid var(--tan);
-  border-radius: 1px;
-  overflow: hidden;
-  max-height: 180px;
-}
-.upload-preview-img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  display: block;
-}
-.upload-remove-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(62,32,16,0.85);
-  color: var(--cream);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  transition: background 0.2s;
-  line-height: 1;
-}
-.upload-remove-btn:hover {
-  background: var(--rust);
-}
-
-/* Card Photo and Radar */
-.card-photo-wrap {
-  margin-top: 18px;
-  border: 1px solid var(--tan);
-  border-radius: 1px;
-  overflow: hidden;
-  box-shadow: 2px 2px 0 var(--parchment);
-  display: none;
-}
-.card-photo {
-  width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-  display: block;
-}
-.card-radar-wrap {
-  display: flex;
-  justify-content: center;
-  margin-top: 18px;
-  padding: 10px 0;
-  border-top: 1px dashed var(--tan);
-  border-bottom: 1px dashed var(--tan);
-}
-.card-radar-container {
-  width: 160px;
-  height: 160px;
-  background: var(--paper);
-  border-radius: 50%;
-  padding: 8px;
-}
-
-/* Stamp styling */
-.stamp-container {
-  position: relative;
-}
-.stamp {
-  position: absolute;
-  top: -15px;
-  right: 10px;
-  width: 68px;
-  height: 68px;
-  border: 3px double var(--rust);
-  border-radius: 50%;
-  color: var(--rust);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Noto Serif TC', serif;
-  font-weight: 900;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  line-height: 1.1;
-  text-shadow: 0 0 1px rgba(176,80,48,0.2);
-  transform: rotate(-15deg) scale(0);
-  opacity: 0;
-  z-index: 10;
-  pointer-events: none;
-}
-.stamp::before {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border: 1px solid var(--rust);
-  border-radius: 50%;
-}
-.stamp.stamp-active {
-  animation: stampPlay 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-@keyframes stampPlay {
-  0% { transform: rotate(0deg) scale(2); opacity: 0; filter: blur(2px); }
-  70% { transform: rotate(-18deg) scale(0.95); opacity: 0.95; }
-  100% { transform: rotate(-15deg) scale(0.85); opacity: 0.85; }
-}
-
-/* Sidebar with thumbnail layout */
-.hi-content-wrap {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  width: 100%;
-}
-.hi-thumb {
-  width: 46px;
-  height: 46px;
-  object-fit: cover;
-  border-radius: 1px;
-  border: 1px solid var(--tan);
-  background: var(--cream);
-  flex-shrink: 0;
-}
-.hi-text-info {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Search & filter in sidebar */
-.search-filter-wrap {
-  background: var(--cream);
-  border: 1px solid var(--tan);
-  border-radius: 1px;
-  padding: 10px;
-  margin-bottom: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.search-input-wrap {
-  position: relative;
-}
-.search-input {
-  width: 100%;
-  padding: 6px 28px 6px 10px;
-  font-family: inherit;
-  font-size: 12px;
-  border: 1px solid var(--tan);
-  background: var(--paper);
-  border-radius: 1px;
-  color: var(--espresso);
-  outline: none;
-  transition: border-color 0.2s;
-}
-.search-input:focus {
-  border-color: var(--coffee);
-}
-.search-clear {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--mist);
-  cursor: pointer;
-  font-size: 12px;
-  display: none;
-}
-.search-clear.show {
-  display: block;
-}
-.filter-row {
-  display: flex;
-  gap: 6px;
-}
-.filter-select {
-  flex: 1;
-  padding: 5px;
-  font-family: inherit;
-  font-size: 11px;
-  border: 1px solid var(--tan);
-  background: var(--paper);
-  border-radius: 1px;
-  color: var(--coffee);
-  outline: none;
-  cursor: pointer;
-}
-.btn-roulette {
-  padding: 5px 8px;
-  font-family: inherit;
-  font-size: 11px;
-  border: 1px solid var(--tan);
-  background: var(--paper);
-  color: var(--coffee);
-  border-radius: 1px;
-  cursor: pointer;
-  transition: all 0.18s;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-.btn-roulette:hover {
-  background: var(--parchment);
-  border-color: var(--warm-brown);
-}
-
-/* Data backup options */
-.backup-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.btn-backup {
-  flex: 1;
-  padding: 7px;
-  background: none;
-  border: 1px solid var(--tan);
-  color: var(--coffee);
-  font-family: 'Noto Serif TC', serif;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  border-radius: 1px;
-  transition: all 0.18s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-.btn-backup:hover {
-  background: var(--parchment);
-  border-color: var(--warm-brown);
-}
-
-/* Modal layout */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(62,32,16,0.65);
-  backdrop-filter: blur(4px);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  padding: 20px;
-}
-.modal-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-.modal-box {
-  background: var(--paper);
-  border: 1px solid var(--tan);
-  border-radius: 2px;
-  width: 100%;
-  max-width: 380px;
-  box-shadow: 0 10px 30px rgba(62,32,16,0.2), 4px 4px 0 var(--parchment), 8px 8px 0 var(--tan);
-  transform: scale(0.9);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  padding: 28px 20px 24px;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-}
-.modal-overlay.open .modal-box {
-  transform: scale(1);
-}
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: var(--mist);
-  cursor: pointer;
-  line-height: 1;
-  transition: color 0.2s;
-}
-.modal-close:hover {
-  color: var(--rust);
-}
-.modal-kamon {
-  width: 42px;
-  height: 42px;
-  margin: 0 auto 12px;
-  opacity: 0.8;
-}
-.modal-subtitle {
-  font-size: 10px;
-  color: var(--warm-brown);
-  letter-spacing: 0.2em;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-}
-.modal-title {
-  font-family: 'Shippori Mincho', serif;
-  font-size: 22px;
-  color: var(--coffee);
-  margin-bottom: 14px;
-  font-weight: 600;
-  line-height: 1.3;
-}
-.modal-content-card {
-  background: var(--cream);
-  border: 1px solid var(--tan);
-  border-radius: 1px;
-  padding: 14px 16px;
-  margin-bottom: 18px;
-  text-align: left;
-}
-.mc-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 12px;
-  border-bottom: 1px dashed rgba(214,196,154,0.5);
-  padding-bottom: 5px;
-}
-.mc-row:last-child {
-  border: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-.mc-label {
-  color: var(--warm-brown);
-  font-weight: 500;
-}
-.mc-val {
-  color: var(--espresso);
-  font-weight: 600;
-}
-.mc-stars {
-  color: var(--rust);
-}
-.btn-modal-action {
-  width: 100%;
-  padding: 10px;
-  background: var(--coffee);
-  color: var(--cream);
-  border: none;
-  font-family: 'Noto Serif TC', serif;
-  font-size: 13px;
-  letter-spacing: 0.15em;
-  cursor: pointer;
-  transition: background 0.2s;
-  border-radius: 1px;
-}
-.btn-modal-action:hover {
-  background: var(--espresso);
-}
-
-/* Modal animation */
-.roulette-anim {
-  animation: rouletteSpin 0.12s linear infinite;
-}
-@keyframes rouletteSpin {
-  0% { transform: translateY(-5px); opacity: 0.7; }
-  50% { transform: translateY(5px); opacity: 0.7; }
-  100% { transform: translateY(-5px); opacity: 0.7; }
-}
-
-/* Mobile full-screen overlay when sidebar open */
-.sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(62,32,16,0.3);
-  backdrop-filter: blur(1.5px);
-  z-index: 980;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.sidebar-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
+/* ── Animations ─────────────────────────────────── */
+@keyframes fadeDown { from { opacity:0; transform:translateY(-14px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeUp   { from { opacity:0; transform:translateY(14px);  } to { opacity:1; transform:translateY(0); } }
 
 /* ── Responsive ─────────────────────────────────── */
 @media (max-width: 520px) {
@@ -1227,90 +700,16 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
 
         <!-- 03 評分 -->
         <div class="field">
-          <div class="field-head"><span class="field-num">03</span><label>整體評分 ✦</label></div>
-          <p class="field-hint">點選星星為各個向度評分</p>
-          <div class="rating-container">
-            <div class="rating-grid">
-              <!-- 氛圍 -->
-              <div class="sub-rating">
-                <div class="rating-label-inline">
-                  <span>老屋氛圍 ✦</span>
-                  <span class="rating-score-num" id="score-vibe">0</span>
-                </div>
-                <div class="sub-star-row" id="star-row-vibe">
-                  <div class="sub-star" data-v="1" onclick="setSubStar('vibe', 1)" role="button" aria-label="1 星">★</div>
-                  <div class="sub-star" data-v="2" onclick="setSubStar('vibe', 2)" role="button" aria-label="2 星">★</div>
-                  <div class="sub-star" data-v="3" onclick="setSubStar('vibe', 3)" role="button" aria-label="3 星">★</div>
-                  <div class="sub-star" data-v="4" onclick="setSubStar('vibe', 4)" role="button" aria-label="4 星">★</div>
-                  <div class="sub-star" data-v="5" onclick="setSubStar('vibe', 5)" role="button" aria-label="5 星">★</div>
-                </div>
-              </div>
-              <!-- 甜點 -->
-              <div class="sub-rating">
-                <div class="rating-label-inline">
-                  <span>甜點美味 🍰</span>
-                  <span class="rating-score-num" id="score-dessert">0</span>
-                </div>
-                <div class="sub-star-row" id="star-row-dessert">
-                  <div class="sub-star" data-v="1" onclick="setSubStar('dessert', 1)" role="button" aria-label="1 星">★</div>
-                  <div class="sub-star" data-v="2" onclick="setSubStar('dessert', 2)" role="button" aria-label="2 星">★</div>
-                  <div class="sub-star" data-v="3" onclick="setSubStar('dessert', 3)" role="button" aria-label="3 星">★</div>
-                  <div class="sub-star" data-v="4" onclick="setSubStar('dessert', 4)" role="button" aria-label="4 星">★</div>
-                  <div class="sub-star" data-v="5" onclick="setSubStar('dessert', 5)" role="button" aria-label="5 星">★</div>
-                </div>
-              </div>
-              <!-- 飲品 -->
-              <div class="sub-rating">
-                <div class="rating-label-inline">
-                  <span>咖啡飲品 ☕</span>
-                  <span class="rating-score-num" id="score-drinks">0</span>
-                </div>
-                <div class="sub-star-row" id="star-row-drinks">
-                  <div class="sub-star" data-v="1" onclick="setSubStar('drinks', 1)" role="button" aria-label="1 星">★</div>
-                  <div class="sub-star" data-v="2" onclick="setSubStar('drinks', 2)" role="button" aria-label="2 星">★</div>
-                  <div class="sub-star" data-v="3" onclick="setSubStar('drinks', 3)" role="button" aria-label="3 星">★</div>
-                  <div class="sub-star" data-v="4" onclick="setSubStar('drinks', 4)" role="button" aria-label="4 星">★</div>
-                  <div class="sub-star" data-v="5" onclick="setSubStar('drinks', 5)" role="button" aria-label="5 星">★</div>
-                </div>
-              </div>
-              <!-- 服務 -->
-              <div class="sub-rating">
-                <div class="rating-label-inline">
-                  <span>服務靜謐 🤫</span>
-                  <span class="rating-score-num" id="score-service">0</span>
-                </div>
-                <div class="sub-star-row" id="star-row-service">
-                  <div class="sub-star" data-v="1" onclick="setSubStar('service', 1)" role="button" aria-label="1 星">★</div>
-                  <div class="sub-star" data-v="2" onclick="setSubStar('service', 2)" role="button" aria-label="2 星">★</div>
-                  <div class="sub-star" data-v="3" onclick="setSubStar('service', 3)" role="button" aria-label="3 星">★</div>
-                  <div class="sub-star" data-v="4" onclick="setSubStar('service', 4)" role="button" aria-label="4 星">★</div>
-                  <div class="sub-star" data-v="5" onclick="setSubStar('service', 5)" role="button" aria-label="5 星">★</div>
-                </div>
-              </div>
-            </div>
-            <!-- Radar preview -->
-            <div class="radar-preview">
-              <svg class="radar-svg" viewBox="0 0 100 100" id="radar-svg-form">
-                <!-- BG lines -->
-                <polygon class="radar-bg-polygon" points="50,10 90,50 50,90 10,50"></polygon>
-                <polygon class="radar-bg-polygon" points="50,20 80,50 50,80 20,50"></polygon>
-                <polygon class="radar-bg-polygon" points="50,30 70,50 50,70 30,50"></polygon>
-                <polygon class="radar-bg-polygon" points="50,40 60,50 50,60 40,50"></polygon>
-                <!-- Axes -->
-                <line class="radar-axis" x1="50" y1="50" x2="50" y2="10"></line>
-                <line class="radar-axis" x1="50" y1="50" x2="90" y2="50"></line>
-                <line class="radar-axis" x1="50" y1="50" x2="50" y2="90"></line>
-                <line class="radar-axis" x1="50" y1="50" x2="10" y2="50"></line>
-                <!-- Labels -->
-                <text class="radar-axis-text" x="50" y="5">氛圍</text>
-                <text class="radar-axis-text" x="95" y="50">甜點</text>
-                <text class="radar-axis-text" x="50" y="95">飲品</text>
-                <text class="radar-axis-text" x="5" y="50">服務</text>
-                <!-- Value polygon -->
-                <polygon class="radar-polygon" id="radar-poly-form" points="50,50 50,50 50,50 50,50"></polygon>
-              </svg>
-            </div>
+          <div class="field-head"><span class="field-num">03</span><label>整體評分</label></div>
+          <p class="field-hint">點選星星給分</p>
+          <div class="star-row" id="star-row">
+            <div class="star" data-v="1" onclick="setStars(1)" role="button" aria-label="1 星">★</div>
+            <div class="star" data-v="2" onclick="setStars(2)" role="button" aria-label="2 星">★</div>
+            <div class="star" data-v="3" onclick="setStars(3)" role="button" aria-label="3 星">★</div>
+            <div class="star" data-v="4" onclick="setStars(4)" role="button" aria-label="4 星">★</div>
+            <div class="star" data-v="5" onclick="setStars(5)" role="button" aria-label="5 星">★</div>
           </div>
+          <p class="star-label" id="star-label">尚未評分</p>
         </div>
 
         <!-- 04 停車 -->
@@ -1371,22 +770,6 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
           <textarea id="f-note" placeholder="午後陽光從昭和窗花透進來，空氣裡有淡淡咖啡香與舊木頭的氣息…" oninput="refreshDots()"></textarea>
         </div>
 
-        <!-- 09 探訪影像 -->
-        <div class="field">
-          <div class="field-head"><span class="field-num">09</span><label>探訪影像</label></div>
-          <p class="field-hint">拖曳或選擇一張照片，我們將在本地自動壓縮以節省空間</p>
-          <div class="upload-zone" id="upload-zone" onclick="triggerFileInput()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
-            <div class="upload-icon">📷</div>
-            <div class="upload-text" id="upload-text">點擊或拖曳照片至此</div>
-            <div class="upload-hint">支援 JPG / PNG / WEBP</div>
-            <input type="file" id="f-photo-input" accept="image/*" style="display:none;" onchange="handleFileSelect(event)" />
-          </div>
-          <div class="upload-preview-wrap" id="upload-preview-wrap">
-            <img src="" class="upload-preview-img" id="upload-preview-img" alt="預覽照片" />
-            <button type="button" class="upload-remove-btn" onclick="removeUploadedPhoto(event)">×</button>
-          </div>
-        </div>
-
         <button class="btn-submit" onclick="generate()">記 錄 此 行</button>
       </div>
 
@@ -1396,44 +779,13 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
           <span class="result-title">探訪記錄</span>
           <button class="btn-reset" onclick="resetForm()">重新填寫</button>
         </div>
-        <div class="result-card" id="result-card" style="position:relative;">
-          <!-- Stamp -->
-          <div class="stamp" id="r-stamp">
-            <span>極上</span>
-            <span>特選</span>
-          </div>
+        <div class="result-card" id="result-card">
           <div class="card-name" id="r-name"></div>
           <div class="card-date" id="r-date"></div>
           <div class="card-stars-row">
             <span class="card-stars" id="r-stars"></span>
             <span class="card-rating-num" id="r-rating-num"></span>
           </div>
-          
-          <!-- Radar SVG Result -->
-          <div class="card-radar-wrap" id="r-radar-wrap" style="display:none;">
-            <div class="card-radar-container">
-              <svg class="radar-svg" viewBox="0 0 100 100" id="radar-svg-result">
-                <!-- BG lines -->
-                <polygon class="radar-bg-polygon" points="50,10 90,50 50,90 10,50"></polygon>
-                <polygon class="radar-bg-polygon" points="50,20 80,50 50,80 20,50"></polygon>
-                <polygon class="radar-bg-polygon" points="50,30 70,50 50,70 30,50"></polygon>
-                <polygon class="radar-bg-polygon" points="50,40 60,50 50,60 40,50"></polygon>
-                <!-- Axes -->
-                <line class="radar-axis" x1="50" y1="50" x2="50" y2="10"></line>
-                <line class="radar-axis" x1="50" y1="50" x2="90" y2="50"></line>
-                <line class="radar-axis" x1="50" y1="50" x2="50" y2="90"></line>
-                <line class="radar-axis" x1="50" y1="50" x2="10" y2="50"></line>
-                <!-- Labels -->
-                <text class="radar-axis-text" x="50" y="5">氛圍</text>
-                <text class="radar-axis-text" x="95" y="50">甜點</text>
-                <text class="radar-axis-text" x="50" y="95">飲品</text>
-                <text class="radar-axis-text" x="5" y="50">服務</text>
-                <!-- Value polygon -->
-                <polygon class="radar-polygon" id="radar-poly-result" points="50,50 50,50 50,50 50,50"></polygon>
-              </svg>
-            </div>
-          </div>
-
           <div class="card-section">
             <div class="card-section-label">招牌甜點</div>
             <div class="card-section-body" id="r-dessert"></div>
@@ -1460,12 +812,6 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
             <div class="card-section-label">造訪筆記</div>
             <div class="card-section-body" id="r-note"></div>
           </div>
-          
-          <!-- Photo Container -->
-          <div class="card-photo-wrap" id="r-photo-wrap">
-            <img src="" class="card-photo" id="r-photo" alt="咖啡廳影像" />
-          </div>
-
           <div class="card-tags-row" id="r-tags"></div>
         </div>
 
@@ -1522,42 +868,11 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
 
       <!-- Panel: 探訪清單 -->
       <div class="tab-panel active" id="panel-history">
-        <!-- 搜尋與篩選 -->
-        <div class="search-filter-wrap">
-          <div class="search-input-wrap">
-            <input type="text" class="search-input" id="search-box" placeholder="搜尋店名、甜點、老屋特徵..." oninput="handleSearch(event)" />
-            <button class="search-clear" id="search-clear-btn" onclick="clearSearch()">×</button>
-          </div>
-          <div class="filter-row">
-            <select class="filter-select" id="filter-rating" onchange="applyFilters()">
-              <option value="">評分不限</option>
-              <option value="5">極佳 (5星)</option>
-              <option value="4">很棒 (4星+)</option>
-              <option value="3">不錯 (3星+)</option>
-            </select>
-            <select class="filter-select" id="filter-price" onchange="applyFilters()">
-              <option value="">價位不限</option>
-              <option value="1">平價 ¥</option>
-              <option value="2">中等 ¥¥</option>
-              <option value="3">稍貴 ¥¥¥</option>
-              <option value="4">高價 ¥¥¥¥</option>
-            </select>
-            <button class="btn-roulette" onclick="spinRoulette()" title="今天喝什麼？隨機提案">
-              🎲 提案
-            </button>
-          </div>
-        </div>
-
         <div id="history-list-wrap">
           <p class="history-empty" id="history-empty">還沒有探訪記錄<br>記錄第一間吧 ☕</p>
           <div class="history-list" id="history-list"></div>
         </div>
         <div class="sidebar-sep"></div>
-        <div class="backup-row">
-          <button class="btn-backup" onclick="exportData()">💾 匯出備份</button>
-          <button class="btn-backup" onclick="triggerImport()">📥 匯入還原</button>
-          <input type="file" id="import-file-input" accept=".json" style="display:none;" onchange="importData(event)" />
-        </div>
         <button class="btn-clear-all" onclick="clearAll()">清除所有記錄</button>
       </div>
 
@@ -1577,44 +892,6 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
   <span class="toggle-badge" id="toggle-badge">0</span>
 </button>
 
-<!-- Modal overlay: 今日提案 -->
-<div class="modal-overlay" id="roulette-modal" onclick="closeRouletteModal(event)">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeRouletteModal(event)">×</button>
-    <svg class="modal-kamon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="32" cy="32" r="30" fill="none" stroke="#6B4226" stroke-width="1.2"/>
-      <circle cx="32" cy="32" r="24" fill="none" stroke="#6B4226" stroke-width="0.7" stroke-dasharray="3 3"/>
-      <path d="M22 26 h20 l-3 14 H25 Z" fill="none" stroke="#6B4226" stroke-width="1.3" stroke-linejoin="round"/>
-      <path d="M42 29 q5 0 5 4 q0 4-5 4" fill="none" stroke="#6B4226" stroke-width="1.3"/>
-      <path d="M27 26 q0-5 5-5 q5 0 5 5" fill="none" stroke="#6B4226" stroke-width="1"/>
-    </svg>
-    <div class="modal-subtitle" id="roulette-subtitle">今日咖啡提案</div>
-    <div class="modal-title" id="roulette-title">抽籤中...</div>
-    <div class="modal-content-card" id="roulette-card" style="display:none;">
-      <div class="mc-row">
-        <span class="mc-label">評分</span>
-        <span class="mc-val mc-stars" id="roulette-stars">—</span>
-      </div>
-      <div class="mc-row">
-        <span class="mc-label">招牌甜點</span>
-        <span class="mc-val" id="roulette-dessert">—</span>
-      </div>
-      <div class="mc-row">
-        <span class="mc-label">老屋靈魂</span>
-        <span class="mc-val" id="roulette-soul">—</span>
-      </div>
-      <div class="mc-row">
-        <span class="mc-label">消費價位</span>
-        <span class="mc-val" id="roulette-price">—</span>
-      </div>
-    </div>
-    <button class="btn-modal-action" id="roulette-btn" onclick="goToRouletteEntry()">出發探訪 ☕</button>
-  </div>
-</div>
-
-<!-- Mobile Sidebar Overlay -->
-<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
-
 <script>
 // ══════════════════════════════════════════════════
 //  Google Maps 設定
@@ -1623,21 +900,10 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
 const GOOGLE_MAPS_API_KEY = ''; // ← 填入你的 API key
 
 // ── State ──────────────────────────────────────────
-let rating = {
-  vibe: 0,
-  dessert: 0,
-  drinks: 0,
-  service: 0
-};
-let uploadedPhoto = ''; // base64 string
+let rating = 0;
 let parking = '';
 let priceLevel = 0;
 let returnScore = null; // null = untouched
-
-// ── Filter & Search State ──
-let searchQuery = '';
-let filterRating = '';
-let filterPrice = '';
 
 const STAR_LABELS  = ['','還好，有緣再來','普通，甜點還不錯','不錯，值得再訪','很喜歡，推薦給朋友','完美，已加入口袋名單 ★'];
 const PRICE_LABELS = ['','平價 · 人均 150 以下','中等 · 人均 150–300','稍貴 · 人均 300–500','高價 · 人均 500 以上'];
@@ -1663,113 +929,11 @@ function returnLabel(v) {
   return v + ' / 100 — 已排入下次行程 ✦';
 }
 
-// ── Radar Chart Coordinates ────────────────────────
-function getRadarPoints(rObj) {
-  const v = rObj.vibe || 0;
-  const de = rObj.dessert || 0;
-  const dr = rObj.drinks || 0;
-  const s = rObj.service || 0;
-  const p1 = `50,${50 - (v / 5) * 40}`;
-  const p2 = `${50 + (de / 5) * 40},50`;
-  const p3 = `50,${50 + (dr / 5) * 40}`;
-  const p4 = `${50 - (s / 5) * 40},50`;
-  return `${p1} ${p2} ${p3} ${p4}`;
-}
-
-function updateRadarForm() {
-  const pts = getRadarPoints(rating);
-  document.getElementById('radar-poly-form').setAttribute('points', pts);
-}
-
-// ── Photo Upload Methods ──────────────────────────
-function triggerFileInput() {
-  document.getElementById('f-photo-input').click();
-}
-
-function handleDragOver(e) {
-  e.preventDefault();
-  document.getElementById('upload-zone').classList.add('dragover');
-}
-
-function handleDragLeave(e) {
-  e.preventDefault();
-  document.getElementById('upload-zone').classList.remove('dragover');
-}
-
-function handleDrop(e) {
-  e.preventDefault();
-  document.getElementById('upload-zone').classList.remove('dragover');
-  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-    processPhotoFile(e.dataTransfer.files[0]);
-  }
-}
-
-function handleFileSelect(e) {
-  if (e.target.files && e.target.files.length > 0) {
-    processPhotoFile(e.target.files[0]);
-  }
-}
-
-function processPhotoFile(file) {
-  if (!file.type.startsWith('image/')) {
-    alert('請選擇圖片檔案。');
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = function(event) {
-    const img = new Image();
-    img.onload = function() {
-      // Resize & compress using Canvas (for localStorage limits)
-      const canvas = document.createElement('canvas');
-      const max_size = 500;
-      let width = img.width;
-      let height = img.height;
-      if (width > height) {
-        if (width > max_size) {
-          height *= max_size / width;
-          width = max_size;
-        }
-      } else {
-        if (height > max_size) {
-          width *= max_size / height;
-          height = max_size;
-        }
-      }
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-      // Compress to JPEG with 0.7 quality (target around 50-80kb)
-      uploadedPhoto = canvas.toDataURL('image/jpeg', 0.7);
-      
-      // Update UI preview
-      document.getElementById('upload-preview-img').src = uploadedPhoto;
-      document.getElementById('upload-preview-wrap').style.display = 'block';
-      document.getElementById('upload-zone').style.display = 'none';
-      refreshDots();
-    };
-    img.src = event.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function removeUploadedPhoto(e) {
-  if (e) e.stopPropagation();
-  uploadedPhoto = '';
-  document.getElementById('f-photo-input').value = '';
-  document.getElementById('upload-preview-wrap').style.display = 'none';
-  document.getElementById('upload-zone').style.display = 'block';
-  refreshDots();
-}
-
 // ── Form controls ──────────────────────────────────
-function setSubStar(cat, val) {
-  rating[cat] = val;
-  document.querySelectorAll('#star-row-' + cat + ' .sub-star').forEach(s => {
-    s.classList.toggle('lit', parseInt(s.dataset.v) <= val);
-  });
-  document.getElementById('score-' + cat).textContent = val;
-  updateRadarForm();
+function setStars(n) {
+  rating = n;
+  document.querySelectorAll('.star').forEach(s => s.classList.toggle('lit', parseInt(s.dataset.v) <= n));
+  document.getElementById('star-label').textContent = STAR_LABELS[n];
   refreshDots();
 }
 
@@ -1811,11 +975,10 @@ function updateTags() {
 }
 
 function refreshDots() {
-  const hasRating = (rating.vibe > 0 || rating.dessert > 0 || rating.drinks > 0 || rating.service > 0) ? 'ok' : '';
   const vals = [
     document.getElementById('f-name').value.trim(),
     document.getElementById('f-dessert').value.trim(),
-    hasRating,
+    rating > 0 ? 'ok' : '',
     parking,
     priceLevel > 0 ? 'ok' : '',
     returnScore !== null ? 'ok' : '',
@@ -1828,76 +991,28 @@ function refreshDots() {
   });
 }
 
-function getAvgRating(rObj) {
-  if (!rObj) return 0;
-  if (typeof rObj === 'number') return rObj;
-  const keys = ['vibe', 'dessert', 'drinks', 'service'];
-  const sum = keys.reduce((acc, k) => acc + (rObj[k] || 0), 0);
-  return sum / keys.length;
-}
-
-function starsStr(n) {
-  const num = Math.round(n);
-  return '★'.repeat(num) + '☆'.repeat(5-num);
-}
-
+function starsStr(n) { return '★'.repeat(n) + '☆'.repeat(5-n); }
 function todayStr() {
   const d = new Date();
   return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日';
 }
 
+// ── Generate & render result ───────────────────────
 // 目前顯示的 entry（地圖函式共用）
 let _currentEntry = null;
-
-function checkStamp(entry) {
-  const avg = getAvgRating(entry.rating);
-  const shouldStamp = avg >= 4.5 || (entry.returnScore !== null && entry.returnScore >= 90);
-  const stampEl = document.getElementById('r-stamp');
-  if (shouldStamp) {
-    stampEl.className = 'stamp stamp-active';
-  } else {
-    stampEl.className = 'stamp';
-  }
-}
 
 function renderResult(entry) {
   _currentEntry = entry;
   document.getElementById('r-name').textContent       = entry.name;
   document.getElementById('r-date').textContent       = entry.date;
-  
-  const avgRating = getAvgRating(entry.rating);
-  document.getElementById('r-stars').textContent      = starsStr(avgRating);
-  document.getElementById('r-rating-num').textContent = avgRating ? avgRating.toFixed(1)+' / 5' : '尚未評分';
+  document.getElementById('r-stars').textContent      = starsStr(entry.rating);
+  document.getElementById('r-rating-num').textContent = entry.rating ? entry.rating+' / 5' : '尚未評分';
   document.getElementById('r-dessert').textContent    = entry.dessert;
   document.getElementById('r-soul').textContent       = entry.soul;
   document.getElementById('r-note').textContent       = entry.note;
   document.getElementById('r-parking').textContent    = entry.parking || '—';
   document.getElementById('r-price').textContent      = entry.priceLevel ? PRICE_STR[entry.priceLevel]+'  '+PRICE_LABELS[entry.priceLevel] : '—';
   document.getElementById('r-return').textContent     = entry.returnScore !== null ? returnLabel(entry.returnScore) : '—';
-  
-  // ── 雷達圖 ──
-  const rWrap = document.getElementById('r-radar-wrap');
-  if (entry.rating && typeof entry.rating === 'object' && (entry.rating.vibe || entry.rating.dessert || entry.rating.drinks || entry.rating.service)) {
-    rWrap.style.display = 'flex';
-    const pts = getRadarPoints(entry.rating);
-    document.getElementById('radar-poly-result').setAttribute('points', pts);
-  } else {
-    rWrap.style.display = 'none';
-  }
-
-  // ── 照片 ──
-  const pWrap = document.getElementById('r-photo-wrap');
-  const pEl = document.getElementById('r-photo');
-  if (entry.photo) {
-    pEl.src = entry.photo;
-    pWrap.style.display = 'block';
-  } else {
-    pWrap.style.display = 'none';
-  }
-
-  // ── 印章 ──
-  checkStamp(entry);
-
   const { base, extra } = computeTags(entry.dessert);
   document.getElementById('r-tags').innerHTML = [...base,...extra].map(t => '<span class="card-tag">'+t+'</span>').join('');
 
@@ -1957,8 +1072,7 @@ function generate() {
     dessert:     document.getElementById('f-dessert').value.trim() || '（未填）',
     soul:        document.getElementById('f-soul').value.trim()    || '（未填）',
     note:        document.getElementById('f-note').value.trim()    || '（未填）',
-    rating:      { ...rating },
-    photo:       uploadedPhoto,
+    rating:      rating,
     parking:     parking,
     priceLevel:  priceLevel,
     returnScore: returnScore,
@@ -1985,62 +1099,19 @@ function toggleFav(id) {
   renderHistorySidebar();
 }
 
-function getFilteredEntries(allEntries) {
-  return allEntries.filter(e => {
-    // 1. Search Query
-    if (searchQuery) {
-      const nameMatch = e.name.toLowerCase().includes(searchQuery);
-      const dessertMatch = e.dessert.toLowerCase().includes(searchQuery);
-      const soulMatch = e.soul.toLowerCase().includes(searchQuery);
-      const noteMatch = e.note.toLowerCase().includes(searchQuery);
-      const addressMatch = (e.address || '').toLowerCase().includes(searchQuery);
-      if (!nameMatch && !dessertMatch && !soulMatch && !noteMatch && !addressMatch) {
-        return false;
-      }
-    }
-    
-    // 2. Rating Filter
-    if (filterRating) {
-      const avg = getAvgRating(e.rating);
-      const target = parseInt(filterRating);
-      if (target === 5 && avg < 5) return false;
-      if (avg < target) return false;
-    }
-    
-    // 3. Price Filter
-    if (filterPrice) {
-      if (e.priceLevel !== parseInt(filterPrice)) return false;
-    }
-    
-    return true;
-  });
-}
-
 function renderFavList() {
   const favIds  = loadFavIds();
-  const allEntries = loadEntries().filter(e => favIds.includes(e.id));
-  const entries = getFilteredEntries(allEntries);
-  
+  const entries = loadEntries().filter(e => favIds.includes(e.id));
   document.getElementById('tab-fav-badge').textContent = entries.length;
   document.getElementById('fav-empty').style.display = entries.length ? 'none' : 'block';
   const list = document.getElementById('fav-list');
   list.innerHTML = entries.map(e => {
-    const avgRating = getAvgRating(e.rating);
-    const stars = starsStr(avgRating).substring(0,5);
-    const thumbHtml = e.photo
-      ? `<img class="hi-thumb" src="${e.photo}" alt="${escHtml(e.name)}">`
-      : `<div class="hi-thumb" style="display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--mist);">☕</div>`;
-
+    const stars = starsStr(e.rating).substring(0,5);
     return '<div class="fav-item" onclick="viewEntry('+e.id+')">'
-         + '<div class="hi-content-wrap">'
-         + thumbHtml
-         + '<div class="hi-text-info">'
          + '<div class="hi-name" style="padding-right:24px">'+escHtml(e.name)+'</div>'
          + '<div class="hi-meta">'
          + '<span class="hi-stars" style="color:var(--rust)">'+stars+'</span>'
          + '<span>'+escHtml(e.date)+'</span>'
-         + '</div>'
-         + '</div>'
          + '</div>'
          + '<button class="fav-unfav" onclick="event.stopPropagation();toggleFav('+e.id+')" aria-label="取消收藏" title="取消收藏">♥</button>'
          + '</div>';
@@ -2091,38 +1162,24 @@ function clearAll() {
 }
 
 function renderHistorySidebar() {
-  const allEntries = loadEntries();
-  const filteredEntries = getFilteredEntries(allEntries);
+  const entries = loadEntries();
   const favIds  = loadFavIds();
-  const totalCount = allEntries.length;
-  const filteredCount = filteredEntries.length;
-  
-  document.getElementById('tab-history-badge').textContent = filteredCount;
-  document.getElementById('toggle-badge').textContent  = totalCount;
-  document.getElementById('toggle-badge').classList.toggle('show', totalCount > 0);
-  document.getElementById('history-empty').style.display = filteredCount ? 'none' : 'block';
-  
+  const count   = entries.length;
+  document.getElementById('tab-history-badge').textContent = count;
+  document.getElementById('toggle-badge').textContent  = count;
+  document.getElementById('toggle-badge').classList.toggle('show', count > 0);
+  document.getElementById('history-empty').style.display = count ? 'none' : 'block';
   const list = document.getElementById('history-list');
-  list.innerHTML = filteredEntries.map(e => {
-    const avgRating = getAvgRating(e.rating);
-    const stars    = starsStr(avgRating).substring(0,5);
+  list.innerHTML = entries.map(e => {
+    const stars    = starsStr(e.rating).substring(0,5);
     const isFav    = favIds.includes(e.id);
     const favClass = isFav ? 'hi-fav favorited' : 'hi-fav';
     const favIcon  = isFav ? '♥' : '♡';
-    const thumbHtml = e.photo
-      ? `<img class="hi-thumb" src="${e.photo}" alt="${escHtml(e.name)}">`
-      : `<div class="hi-thumb" style="display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--mist);">☕</div>`;
-
     return '<div class="history-item" id="hi-'+e.id+'" onclick="viewEntry('+e.id+')">'
-         + '<div class="hi-content-wrap">'
-         + thumbHtml
-         + '<div class="hi-text-info">'
          + '<div class="hi-name" style="padding-right:46px">'+escHtml(e.name)+'</div>'
          + '<div class="hi-meta">'
          + '<span class="hi-stars">'+stars+'</span>'
          + '<span>'+escHtml(e.date)+'</span>'
-         + '</div>'
-         + '</div>'
          + '</div>'
          + '<button class="'+favClass+'" id="fav-btn-'+e.id+'" onclick="event.stopPropagation();toggleFav('+e.id+')" aria-label="收藏">'+favIcon+'</button>'
          + '<button class="hi-delete" onclick="event.stopPropagation();deleteEntry('+e.id+')" aria-label="刪除">×</button>'
@@ -2156,7 +1213,6 @@ function toggleSidebar(force) {
   sidebarOpen = (force !== undefined) ? force : !sidebarOpen;
   document.getElementById('sidebar').classList.toggle('open', sidebarOpen);
   document.getElementById('sidebar-toggle').classList.toggle('open', sidebarOpen);
-  document.getElementById('sidebar-overlay').classList.toggle('open', sidebarOpen);
 }
 
 // ── Copy & print ───────────────────────────────────
@@ -2186,21 +1242,11 @@ function printCard() { window.print(); }
 // ── Reset form ─────────────────────────────────────
 function resetForm() {
   ['f-name','f-address','f-dessert','f-soul','f-note'].forEach(id => document.getElementById(id).value = '');
-  rating = { vibe: 0, dessert: 0, drinks: 0, service: 0 };
-  uploadedPhoto = '';
-  document.getElementById('f-photo-input').value = '';
-  document.getElementById('upload-preview-wrap').style.display = 'none';
-  document.getElementById('upload-zone').style.display = 'block';
-  
-  document.querySelectorAll('.sub-star').forEach(s => s.classList.remove('lit'));
-  ['vibe', 'dessert', 'drinks', 'service'].forEach(cat => {
-    document.getElementById('score-' + cat).textContent = '0';
-  });
-  updateRadarForm();
-
-  parking = ''; priceLevel = 0; returnScore = null;
+  rating = 0; parking = ''; priceLevel = 0; returnScore = null;
+  document.querySelectorAll('.star').forEach(s => s.classList.remove('lit'));
   document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.yen-btn').forEach(b => b.classList.remove('lit'));
+  document.getElementById('star-label').textContent    = '尚未評分';
   document.getElementById('parking-label').textContent = '尚未選擇';
   document.getElementById('price-label').textContent   = '尚未選擇';
   document.getElementById('f-return').value            = 50;
@@ -2210,168 +1256,6 @@ function resetForm() {
   refreshDots();
   document.getElementById('result-wrap').style.display = 'none';
   window.scrollTo({ top:0, behavior:'smooth' });
-}
-
-// ── Search & Filter Handlers ────────────────────────
-function handleSearch(e) {
-  searchQuery = e.target.value.trim().toLowerCase();
-  const clearBtn = document.getElementById('search-clear-btn');
-  clearBtn.classList.toggle('show', searchQuery.length > 0);
-  applyFilters();
-}
-
-function clearSearch() {
-  document.getElementById('search-box').value = '';
-  searchQuery = '';
-  document.getElementById('search-clear-btn').classList.remove('show');
-  applyFilters();
-}
-
-function applyFilters() {
-  filterRating = document.getElementById('filter-rating').value;
-  filterPrice = document.getElementById('filter-price').value;
-  renderHistorySidebar();
-}
-
-// ── Data Export & Import ────────────────────────────
-function exportData() {
-  const entries = loadEntries();
-  const favIds = loadFavIds();
-  const data = {
-    version: '1.1',
-    entries: entries,
-    favorites: favIds
-  };
-  const jsonString = JSON.stringify(data, null, 2);
-  const blob = new Blob([jsonString], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `chiayi_cafe_backup_${new Date().toISOString().slice(0,10)}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-function triggerImport() {
-  document.getElementById('import-file-input').click();
-}
-
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (!data.entries) {
-        alert('無效的備份檔案格式。');
-        return;
-      }
-      if (confirm('匯入備份將會合併現有資料，確定要繼續嗎？')) {
-        const currentEntries = loadEntries();
-        const currentFavs = loadFavIds();
-        
-        // Merge entries by ID (new replaces old, or adds if missing)
-        data.entries.forEach(newEntry => {
-          const idx = currentEntries.findIndex(e => e.id === newEntry.id);
-          if (idx >= 0) {
-            currentEntries[idx] = newEntry;
-          } else {
-            currentEntries.push(newEntry);
-          }
-        });
-        
-        currentEntries.sort((a,b) => b.id - a.id);
-        localStorage.setItem(LS_KEY, JSON.stringify(currentEntries));
-        
-        if (data.favorites) {
-          const mergedFavs = Array.from(new Set([...currentFavs, ...data.favorites]));
-          localStorage.setItem(FAV_KEY, JSON.stringify(mergedFavs));
-        }
-        
-        alert('資料還原成功！');
-        renderHistorySidebar();
-        resetForm();
-      }
-    } catch(err) {
-      alert('讀取檔案失敗：' + err.message);
-    }
-  };
-  reader.readAsText(file);
-  event.target.value = '';
-}
-
-// ── Today Café Proposal (Roulette) ──────────────────
-let rouletteSelectedEntry = null;
-
-function spinRoulette() {
-  const entries = loadEntries();
-  if (entries.length === 0) {
-    alert('請先新增一些咖啡廳記錄，才能進行隨機提案喔！');
-    return;
-  }
-  
-  if (window.innerWidth < 720) toggleSidebar(false);
-  
-  const modal = document.getElementById('roulette-modal');
-  modal.classList.add('open');
-  
-  const titleEl = document.getElementById('roulette-title');
-  const cardEl = document.getElementById('roulette-card');
-  const btnEl = document.getElementById('roulette-btn');
-  
-  cardEl.style.display = 'none';
-  titleEl.classList.add('roulette-anim');
-  btnEl.disabled = true;
-  
-  let counter = 0;
-  const duration = 1200; // milliseconds
-  const intervalTime = 70;
-  const totalSteps = duration / intervalTime;
-  
-  const timer = setInterval(() => {
-    const randIdx = Math.floor(Math.random() * entries.length);
-    titleEl.textContent = entries[randIdx].name;
-    counter++;
-    
-    if (counter >= totalSteps) {
-      clearInterval(timer);
-      titleEl.classList.remove('roulette-anim');
-      
-      const finalIdx = Math.floor(Math.random() * entries.length);
-      const selected = entries[finalIdx];
-      rouletteSelectedEntry = selected;
-      
-      titleEl.textContent = selected.name;
-      
-      const avgRating = getAvgRating(selected.rating);
-      document.getElementById('roulette-stars').textContent = '★'.repeat(Math.round(avgRating));
-      document.getElementById('roulette-dessert').textContent = selected.dessert || '—';
-      document.getElementById('roulette-soul').textContent = selected.soul || '—';
-      
-      let priceText = '—';
-      if (selected.priceLevel) {
-        priceText = PRICE_STR[selected.priceLevel] + ' ' + PRICE_LABELS[selected.priceLevel].split(' · ')[1];
-      }
-      document.getElementById('roulette-price').textContent = priceText;
-      
-      cardEl.style.display = 'block';
-      btnEl.disabled = false;
-    }
-  }, intervalTime);
-}
-
-function closeRouletteModal(e) {
-  document.getElementById('roulette-modal').classList.remove('open');
-}
-
-function goToRouletteEntry() {
-  if (rouletteSelectedEntry) {
-    closeRouletteModal();
-    viewEntry(rouletteSelectedEntry.id);
-  }
 }
 
 // ── Init ───────────────────────────────────────────
