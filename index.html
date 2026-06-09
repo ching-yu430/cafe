@@ -1369,6 +1369,47 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
   }
 }
 
+/* Postcard Generator */
+.postcard-modal-box {
+  background: var(--paper);
+  border: 1px solid var(--tan);
+  border-radius: 2px;
+  width: 100%;
+  max-width: 540px;
+  box-shadow: 0 12px 36px rgba(62,32,16,0.2), 4px 4px 0 var(--parchment), 8px 8px 0 var(--tan);
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 28px 20px 20px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.modal-overlay.open .postcard-modal-box {
+  transform: scale(1);
+}
+.postcard-preview-wrap {
+  width: 100%;
+  margin: 10px 0 16px;
+  border: 1px solid var(--tan);
+  box-shadow: 0 4px 15px rgba(62,32,16,0.06);
+  background: #FFF;
+  line-height: 0;
+}
+.postcard-preview-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.postcard-hint-text {
+  font-size: 11px;
+  color: var(--warm-brown);
+  opacity: 0.8;
+  margin-top: -6px;
+  margin-bottom: 16px;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
 /* ── Responsive ─────────────────────────────────── */
 @media (max-width: 520px) {
   .page { padding: 50px 14px 60px; }
@@ -1748,6 +1789,7 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
 
         <div class="action-row">
           <button class="btn-action primary" onclick="copyCard()">複製筆記文字</button>
+          <button class="btn-action" onclick="generatePostcard()">✉ 生成明信片</button>
           <button class="btn-action" onclick="printCard()">列印 / 存成 PDF</button>
           <span class="copy-ok" id="copy-ok">✓ 已複製</span>
         </div>
@@ -1911,6 +1953,20 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
 
 <!-- Mobile Sidebar Overlay -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
+
+<!-- Modal overlay: 明信片預覽 -->
+<div class="modal-overlay" id="postcard-modal" onclick="closePostcardModal(event)">
+  <div class="postcard-modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closePostcardModal(event)">×</button>
+    <div class="modal-subtitle">老屋探訪明信片</div>
+    <div class="modal-title" id="postcard-modal-title">生成成功 ✉</div>
+    <div class="postcard-preview-wrap">
+      <img src="" class="postcard-preview-img" id="postcard-preview-img" alt="明信片預覽" />
+    </div>
+    <p class="postcard-hint-text">手機端可長按上方圖片儲存至相簿，或點擊下方按鈕直接下載。</p>
+    <button class="btn-modal-action" id="btn-download-postcard" onclick="downloadPostcard()">下載明信片 💾</button>
+  </div>
+</div>
 
 <script>
 // ══════════════════════════════════════════════════
@@ -2825,6 +2881,8 @@ function initAmbientAudio() {
   hpFilter.connect(volumeNode);
 }
 
+let isSourceStarted = false;
+
 function toggleAmbientAudio() {
   if (!audioCtx) {
     try {
@@ -2841,11 +2899,14 @@ function toggleAmbientAudio() {
     isAmbientPlaying = false;
     container.classList.remove('playing');
   } else {
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    } else {
-      noiseNode.start();
-    }
+    // iOS and Android mobile browsers require AudioContext.resume inside user interaction,
+    // and we must start the source node if it hasn't been started yet.
+    audioCtx.resume().then(() => {
+      if (!isSourceStarted) {
+        noiseNode.start(0);
+        isSourceStarted = true;
+      }
+    });
     isAmbientPlaying = true;
     container.classList.add('playing');
   }
@@ -2863,6 +2924,275 @@ function toggleMuteAmbient() {
     volBtn.textContent = '🔇';
     isAmbientMuted = true;
   }
+}
+
+// ── Phase 3: Postcard Generator ─────────────────────
+function loadPostcardImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = (e) => reject(e);
+    img.src = src;
+  });
+}
+
+function generatePostcard() {
+  if (!_currentEntry) {
+    alert('請先記錄一間咖啡廳，或是點選清單項目以查看紀錄卡。');
+    return;
+  }
+  
+  const canvas = document.createElement('canvas');
+  canvas.width = 1800;
+  canvas.height = 1200;
+  const ctx = canvas.getContext('2d');
+  
+  // 1. Draw background color (retro parchment)
+  ctx.fillStyle = '#FAF4E4';
+  ctx.fillRect(0, 0, 1800, 1200);
+  
+  const renderDetails = () => {
+    // 2. Draw vertical dashed divider line
+    ctx.strokeStyle = '#D6C49A';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([8, 12]);
+    ctx.beginPath();
+    ctx.moveTo(1060, 60);
+    ctx.lineTo(1060, 1140);
+    ctx.stroke();
+    ctx.setLineDash([]); // reset
+    
+    // POSTCARD text in middle
+    ctx.fillStyle = '#A07850';
+    ctx.font = 'normal 900 24px "Noto Serif TC", serif';
+    ctx.letterSpacing = '12px';
+    ctx.save();
+    ctx.translate(1075, 600);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center';
+    ctx.fillText('POSTCARD', 0, 0);
+    ctx.restore();
+    
+    // 3. Draw red stamp/postmark (top right)
+    ctx.strokeStyle = '#B05030';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(1640, 150, 62, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(1640, 150, 54, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    ctx.fillStyle = '#B05030';
+    ctx.font = 'normal 900 20px "Noto Serif TC", serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('極上', 1640, 124);
+    ctx.fillText('特選', 1640, 176);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(1595, 150);
+    ctx.lineTo(1685, 150);
+    ctx.stroke();
+    
+    // 4. Draw Title & Date
+    ctx.fillStyle = '#6B4226';
+    ctx.font = 'normal 900 58px "Shippori Mincho", "Noto Serif TC", serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    
+    // Adjust size if name is long
+    let nameText = _currentEntry.name;
+    if (nameText.length > 8) {
+      ctx.font = 'normal 900 44px "Shippori Mincho", "Noto Serif TC", serif';
+    }
+    ctx.fillText(nameText, 1120, 240);
+    
+    ctx.fillStyle = '#A07850';
+    ctx.font = 'normal 600 24px "Noto Serif TC", serif';
+    ctx.fillText(`探訪日期：${_currentEntry.date}`, 1120, 310);
+    
+    // Stars
+    const avg = getAvgRating(_currentEntry.rating);
+    const stars = '★'.repeat(Math.round(avg)) + '☆'.repeat(5 - Math.round(avg));
+    ctx.fillStyle = '#B05030';
+    ctx.font = 'normal 900 32px "Noto Serif TC", serif';
+    ctx.fillText(stars, 1120, 370);
+    ctx.fillStyle = '#A07850';
+    ctx.font = 'normal 500 22px "Noto Serif TC", serif';
+    ctx.fillText(` (${avg ? avg.toFixed(1) : '—'} / 5)`, 1120 + Math.round(avg)*32 + (5-Math.round(avg))*32 + 10, 368);
+    
+    // 5. Details
+    ctx.fillStyle = '#3E2010';
+    ctx.font = 'normal 600 26px "Noto Serif TC", serif';
+    ctx.fillText('招牌甜點：' + (_currentEntry.dessert || '—'), 1120, 460);
+    ctx.fillText('老屋靈魂：' + (_currentEntry.soul || '—'), 1120, 520);
+    
+    let priceText = '—';
+    if (_currentEntry.priceLevel) {
+      priceText = PRICE_STR[_currentEntry.priceLevel] + '  ' + PRICE_LABELS[_currentEntry.priceLevel].split(' · ')[1];
+    }
+    ctx.fillText('消費價位：' + priceText, 1120, 580);
+    
+    // 6. Note (with wrapping)
+    ctx.fillStyle = '#A07850';
+    ctx.font = 'normal 600 24px "Noto Serif TC", serif';
+    ctx.fillText('造訪筆記 ✦', 1120, 660);
+    
+    ctx.fillStyle = '#3E2010';
+    ctx.font = 'italic 500 26px "Noto Serif TC", serif';
+    const noteText = _currentEntry.note || '—';
+    const limit = 110;
+    const words = noteText.substring(0, limit) + (noteText.length > limit ? '...' : '');
+    wrapPostcardText(ctx, words, 1120, 715, 42, 600);
+    
+    // 7. Zipcode boxes (嘉義郵遞區號 600)
+    ctx.strokeStyle = '#B05030';
+    ctx.lineWidth = 2;
+    const zipCodes = ['6', '0', '0'];
+    for(let i = 0; i < 3; i++) {
+      const boxX = 1530 + i * 46;
+      ctx.strokeRect(boxX, 1055, 36, 46);
+      ctx.fillStyle = '#B05030';
+      ctx.font = 'normal 900 28px monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(zipCodes[i], boxX + 18, 1055 + 23);
+    }
+    
+    // Show Modal
+    const modal = document.getElementById('postcard-modal');
+    const imgEl = document.getElementById('postcard-preview-img');
+    const dataUrl = canvas.toDataURL('image/png');
+    imgEl.src = dataUrl;
+    modal.classList.add('open');
+  };
+  
+  // Draw Photo
+  if (_currentEntry.photo) {
+    loadPostcardImage(_currentEntry.photo).then(img => {
+      ctx.save();
+      // Apply warm sepia retro filter to photo
+      ctx.filter = 'sepia(0.18) contrast(0.96) saturate(0.9)';
+      
+      const targetW = 970;
+      const targetH = 1110;
+      const targetX = 45;
+      const targetY = 45;
+      
+      // Cover crop calculations
+      const imgRatio = img.width / img.height;
+      const targetRatio = targetW / targetH;
+      let sx, sy, sWidth, sHeight;
+      if (imgRatio > targetRatio) {
+        sHeight = img.height;
+        sWidth = img.height * targetRatio;
+        sx = (img.width - sWidth) / 2;
+        sy = 0;
+      } else {
+        sWidth = img.width;
+        sHeight = img.width / targetRatio;
+        sx = 0;
+        sy = (img.height - sHeight) / 2;
+      }
+      
+      ctx.drawImage(img, sx, sy, sWidth, sHeight, targetX, targetY, targetW, targetH);
+      ctx.restore();
+      
+      renderDetails();
+    }).catch(err => {
+      console.error(err);
+      drawFallbackCoffeeCup(ctx);
+      renderDetails();
+    });
+  } else {
+    drawFallbackCoffeeCup(ctx);
+    renderDetails();
+  }
+}
+
+function drawFallbackCoffeeCup(ctx) {
+  ctx.save();
+  ctx.translate(530, 600); // center of left side
+  
+  ctx.strokeStyle = '#6B4226';
+  ctx.lineWidth = 7;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  
+  // Cup body
+  ctx.beginPath();
+  ctx.arc(0, 40, 110, 0, Math.PI, false);
+  ctx.lineTo(-110, -50);
+  ctx.lineTo(110, -50);
+  ctx.closePath();
+  ctx.stroke();
+  
+  // Handle
+  ctx.beginPath();
+  ctx.arc(110, -5, 45, -Math.PI/2, Math.PI/2, false);
+  ctx.stroke();
+  
+  // Steam lines
+  ctx.lineWidth = 5;
+  for(let s = -35; s <= 35; s += 35) {
+    ctx.beginPath();
+    ctx.moveTo(s, -80);
+    ctx.bezierCurveTo(s - 12, -120, s + 12, -150, s, -185);
+    ctx.stroke();
+  }
+  
+  // Plate/saucer
+  ctx.lineWidth = 7;
+  ctx.beginPath();
+  ctx.ellipse(0, 170, 160, 22, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  
+  // Text below cup
+  ctx.fillStyle = '#6B4226';
+  ctx.font = 'normal 900 34px "Shippori Mincho", "Noto Serif TC", serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText('嘉義老屋咖啡廳探訪記', 0, 230);
+  
+  ctx.restore();
+}
+
+function wrapPostcardText(ctx, text, x, y, lineHeight, maxWidth) {
+  const words = text.split('');
+  let line = '';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  for (let n = 0; n < words.length; n++) {
+    let testLine = line + words[n];
+    let metrics = ctx.measureText(testLine);
+    let testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      ctx.fillText(line, x, y);
+      line = words[n];
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line, x, y);
+}
+
+function closePostcardModal(e) {
+  document.getElementById('postcard-modal').classList.remove('open');
+}
+
+function downloadPostcard() {
+  const imgEl = document.getElementById('postcard-preview-img');
+  if (!imgEl.src) return;
+  const a = document.createElement('a');
+  a.href = imgEl.src;
+  a.download = `chiayi_cafe_postcard_${_currentEntry ? _currentEntry.name : 'memo'}.png`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 // ── Init ───────────────────────────────────────────
