@@ -1119,20 +1119,254 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
   100% { transform: translateY(-5px); opacity: 0.7; }
 }
 
-/* Mobile full-screen overlay when sidebar open */
-.sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(62,32,16,0.3);
-  backdrop-filter: blur(1.5px);
-  z-index: 980;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+/* ── Phase 2 Premium Features ────────────────────── */
+/* Stamp Book Grid */
+.stamp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 10px 0;
 }
-.sidebar-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
+.stamp-book-item {
+  background: var(--cream);
+  border: 1px solid var(--tan);
+  border-radius: 2px;
+  padding: 14px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: all 0.18s ease;
+  cursor: pointer;
+}
+.stamp-book-item:hover {
+  border-color: var(--warm-brown);
+  background: var(--parchment);
+}
+.sb-stamp-circle {
+  width: 52px;
+  height: 52px;
+  border: 1.5px dashed var(--mist);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--mist);
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 900;
+  font-size: 10px;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  opacity: 0.4;
+  user-select: none;
+  position: relative;
+}
+.stamp-book-item.unlocked .sb-stamp-circle {
+  border: 2px solid var(--rust);
+  color: var(--rust);
+  opacity: 0.85;
+  transform: rotate(-10deg) scale(1.05);
+  box-shadow: 0 0 2px rgba(176,80,48,0.15);
+  background: radial-gradient(circle, transparent 20%, rgba(250, 244, 228, 0.1) 20%);
+  animation: stampIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.stamp-book-item.unlocked .sb-stamp-circle::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px dashed var(--rust);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.5;
+}
+@keyframes stampIn {
+  0% { transform: scale(1.4) rotate(0deg); opacity: 0; filter: blur(1px); }
+  100% { transform: scale(1) rotate(-10deg); opacity: 0.85; }
+}
+.sb-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--coffee);
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+.sb-desc {
+  font-size: 9px;
+  color: var(--mist);
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+.stamp-book-item.unlocked .sb-desc {
+  color: var(--warm-brown);
+}
+
+/* Sticky Memo Note */
+.sticky-note-wrap {
+  margin-top: 24px;
+  position: relative;
+  padding-top: 14px; /* Space for the tape */
+}
+.sticky-tape {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2.5deg);
+  width: 86px;
+  height: 18px;
+  background: rgba(138, 154, 116, 0.42); /* Sage green tape with mild opacity */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  z-index: 5;
+}
+.sticky-note {
+  background: #FAF5DF; /* Classic retro paper tint */
+  border: 1px solid #EFE4BF;
+  box-shadow: 3px 3px 0 var(--parchment), 3px 5px 12px rgba(62,32,16,0.05);
+  padding: 16px 16px 14px;
+  transform: rotate(1deg);
+  transition: transform 0.2s ease, box-shadow 0.2s;
+  font-family: 'Noto Serif TC', serif;
+  position: relative;
+}
+.sticky-note:hover {
+  transform: rotate(0.5deg) scale(1.005);
+  box-shadow: 3px 3px 0 var(--parchment), 3px 6px 14px rgba(62,32,16,0.08);
+}
+.sticky-note-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--warm-brown);
+  opacity: 0.7;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sticky-note-edit-hint {
+  font-size: 8px;
+  color: var(--mist);
+  font-weight: normal;
+  letter-spacing: 0;
+}
+.sticky-note-content {
+  font-size: 13px;
+  color: var(--coffee);
+  line-height: 1.6;
+  min-height: 42px;
+  outline: none;
+  border: 1px solid transparent;
+  padding: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: pre-wrap;
+}
+.sticky-note-content:focus {
+  background: var(--paper);
+  border-color: var(--tan);
+  cursor: text;
+  box-shadow: inset 0 1px 3px rgba(62,32,16,0.05);
+}
+.sticky-note-content:empty::before {
+  content: '點擊此處輸入備忘資訊（例如低消、公休、特色等）...';
+  color: var(--mist);
+  font-style: italic;
+  font-size: 12px;
+}
+
+/* Ambient Audio Player */
+.ambient-player-container {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--paper);
+  border: 1px solid var(--tan);
+  border-radius: 20px;
+  padding: 4px 10px 4px 6px;
+  box-shadow: 2px 2px 8px rgba(62,32,16,0.05);
+  transition: all 0.25s;
+}
+.ambient-player-container:hover {
+  border-color: var(--warm-brown);
+  box-shadow: 2px 4px 12px rgba(62,32,16,0.08);
+}
+.vinyl-wrap {
+  width: 26px;
+  height: 26px;
+  position: relative;
+  cursor: pointer;
+}
+.vinyl-disc {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #2a2a2a 32%, #111 32%, #111 42%, #333 42%, #222 62%, #000 62%);
+  border-radius: 50%;
+  border: 1px solid #000;
+  position: relative;
+}
+.vinyl-disc::before {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--cream);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 0.5px solid var(--coffee);
+}
+.ambient-player-container.playing .vinyl-disc {
+  animation: vinylSpin 3.5s linear infinite;
+}
+@keyframes vinylSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.vinyl-label {
+  font-size: 9.5px;
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 600;
+  color: var(--coffee);
+  letter-spacing: 0.05em;
+  user-select: none;
+  display: none;
+}
+@media (min-width: 480px) {
+  .vinyl-label {
+    display: inline-block;
+  }
+}
+.btn-ambient-control {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--warm-brown);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  transition: color 0.15s;
+  line-height: 1;
+}
+.btn-ambient-control:hover {
+  color: var(--rust);
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 520px) {
+  .ambient-player-container {
+    top: 12px;
+    right: 12px;
+  }
 }
 
 /* ── Responsive ─────────────────────────────────── */
@@ -1155,6 +1389,15 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
 </style>
 </head>
 <body>
+
+<!-- Ambient Audio Player -->
+<div class="ambient-player-container" id="ambient-player">
+  <div class="vinyl-wrap" onclick="toggleAmbientAudio()" title="播放/暫停 昭和背景雜音">
+    <div class="vinyl-disc"></div>
+  </div>
+  <span class="vinyl-label">昭和留聲機</span>
+  <button class="btn-ambient-control" id="btn-ambient-volume" onclick="toggleMuteAmbient()" title="靜音">🔊</button>
+</div>
 
 <div class="layout">
 
@@ -1195,7 +1438,8 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
           <div class="p-dot" id="dot4">五</div><div class="p-line"></div>
           <div class="p-dot" id="dot5">六</div><div class="p-line"></div>
           <div class="p-dot" id="dot6">七</div><div class="p-line"></div>
-          <div class="p-dot" id="dot7">八</div>
+          <div class="p-dot" id="dot7">八</div><div class="p-line"></div>
+          <div class="p-dot" id="dot8">九</div>
         </div>
 
         <!-- 01 店名 -->
@@ -1466,6 +1710,18 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
             <img src="" class="card-photo" id="r-photo" alt="咖啡廳影像" />
           </div>
 
+          <!-- Sticky Memo Note -->
+          <div class="sticky-note-wrap" id="r-sticky-wrap">
+            <div class="sticky-tape"></div>
+            <div class="sticky-note">
+              <div class="sticky-note-label">
+                <span>造訪備忘 📌</span>
+                <span class="sticky-note-edit-hint">點擊文字可直接編輯</span>
+              </div>
+              <div class="sticky-note-content" id="r-sticky-content" contenteditable="true" onblur="saveStickyContent()" placeholder="點選此處輸入備忘資訊（例如低消、公休、特色等）..."></div>
+            </div>
+          </div>
+
           <div class="card-tags-row" id="r-tags"></div>
         </div>
 
@@ -1515,8 +1771,12 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
           <span class="sidebar-tab-badge" id="tab-history-badge">0</span>
         </button>
         <button class="sidebar-tab" id="tab-fav" onclick="switchTab('fav')">
-          ♥ 我的最愛
+          ♥ 最愛
           <span class="sidebar-tab-badge" id="tab-fav-badge">0</span>
+        </button>
+        <button class="sidebar-tab" id="tab-stamps" onclick="switchTab('stamps')">
+          💮 收集冊
+          <span class="sidebar-tab-badge" id="tab-stamps-badge">0/5</span>
         </button>
       </div>
 
@@ -1565,6 +1825,43 @@ input[type=range] { width: 100%; accent-color: var(--coffee); cursor: pointer; h
       <div class="tab-panel" id="panel-fav">
         <p class="fav-empty" id="fav-empty">還沒有收藏的咖啡廳<br>點擊記錄卡上的 ♡ 收藏 ☕</p>
         <div id="fav-list"></div>
+      </div>
+
+      <!-- Panel: 收集冊 -->
+      <div class="tab-panel" id="panel-stamps">
+        <p class="fav-empty" style="text-align:center;margin-bottom:8px;line-height:1.6;">老屋靈魂圖章收集冊 💮<br><span style="font-size:9.5px;color:var(--mist);">在「老屋靈魂」或「造訪筆記」填入特定特徵即可解鎖。解鎖後點擊圖章可篩選店家。</span></p>
+        <div class="stamp-grid">
+          <!-- Stamp 1: 登高探幽 (樓梯) -->
+          <div class="stamp-book-item" id="sb-stair" onclick="filterByStamp('stair')">
+            <div class="sb-stamp-circle">登高<br>探幽</div>
+            <div class="sb-title">登高探幽</div>
+            <div class="sb-desc">探訪老屋木樓梯</div>
+          </div>
+          <!-- Stamp 2: 昭和光影 (窗花) -->
+          <div class="stamp-book-item" id="sb-window" onclick="filterByStamp('window')">
+            <div class="sb-stamp-circle">昭和<br>光影</div>
+            <div class="sb-title">昭和光影</div>
+            <div class="sb-desc">欣賞復古鐵窗花</div>
+          </div>
+          <!-- Stamp 3: 石刻歲月 (磨石子) -->
+          <div class="stamp-book-item" id="sb-stone" onclick="filterByStamp('stone')">
+            <div class="sb-stamp-circle">石刻<br>歲月</div>
+            <div class="sb-title">石刻歲月</div>
+            <div class="sb-desc">體驗懷舊磨石子</div>
+          </div>
+          <!-- Stamp 4: 紅磚暖意 (紅磚) -->
+          <div class="stamp-book-item" id="sb-brick" onclick="filterByStamp('brick')">
+            <div class="sb-stamp-circle">紅磚<br>暖意</div>
+            <div class="sb-title">紅磚暖意</div>
+            <div class="sb-desc">感受老屋紅磚牆</div>
+          </div>
+          <!-- Stamp 5: 和風疊影 (榻榻米) -->
+          <div class="stamp-book-item" id="sb-tatami" onclick="filterByStamp('tatami')">
+            <div class="sb-stamp-circle">和風<br>疊影</div>
+            <div class="sb-title">和風疊影</div>
+            <div class="sb-desc">體驗榻榻米空間</div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -1821,6 +2118,7 @@ function refreshDots() {
     returnScore !== null ? 'ok' : '',
     document.getElementById('f-soul').value.trim(),
     document.getElementById('f-note').value.trim(),
+    uploadedPhoto,
   ];
   vals.forEach((v,i) => {
     const el = document.getElementById('dot'+i);
@@ -1894,6 +2192,9 @@ function renderResult(entry) {
   } else {
     pWrap.style.display = 'none';
   }
+
+  // ── 備忘錄 ──
+  document.getElementById('r-sticky-content').textContent = entry.sticky || '';
 
   // ── 印章 ──
   checkStamp(entry);
@@ -2054,8 +2355,11 @@ function switchTab(tab) {
   currentTab = tab;
   document.getElementById('tab-history').classList.toggle('active', tab === 'history');
   document.getElementById('tab-fav').classList.toggle('active', tab === 'fav');
+  document.getElementById('tab-stamps').classList.toggle('active', tab === 'stamps');
+  
   document.getElementById('panel-history').classList.toggle('active', tab === 'history');
   document.getElementById('panel-fav').classList.toggle('active', tab === 'fav');
+  document.getElementById('panel-stamps').classList.toggle('active', tab === 'stamps');
 }
 
 // ── localStorage ───────────────────────────────────
@@ -2130,6 +2434,11 @@ function renderHistorySidebar() {
   }).join('');
 
   renderFavList();
+  
+  // ── 更新印章收集冊 ──
+  if (typeof updateAchievements === 'function') {
+    updateAchievements(allEntries);
+  }
 }
 
 function viewEntry(id) {
@@ -2371,6 +2680,188 @@ function goToRouletteEntry() {
   if (rouletteSelectedEntry) {
     closeRouletteModal();
     viewEntry(rouletteSelectedEntry.id);
+  }
+}
+
+// ── Phase 2: Achievement Stamps ──────────────────────
+const ACHIEVEMENT_MAP = {
+  stair:  { id: 'sb-stair',  keywords: ['樓梯', '木樓梯', '木梯', '梯子'] },
+  window: { id: 'sb-window', keywords: ['窗花', '鐵窗', '窗格', '花格窗'] },
+  stone:  { id: 'sb-stone',  keywords: ['磨石子', '洗石子'] },
+  brick:  { id: 'sb-brick',  keywords: ['紅磚', '磚牆', '磚頭'] },
+  tatami: { id: 'sb-tatami', keywords: ['榻榻米', '疊蓆', '和室'] }
+};
+
+let activeStampFilter = '';
+
+function updateAchievements(entries) {
+  const keys = Object.keys(ACHIEVEMENT_MAP);
+  const status = {};
+  keys.forEach(k => status[k] = false);
+  
+  entries.forEach(e => {
+    // Check in both soul and note fields
+    const searchTxt = ((e.soul || '') + ' ' + (e.note || '')).toLowerCase();
+    keys.forEach(k => {
+      if (status[k]) return; // already unlocked
+      const hasKw = ACHIEVEMENT_MAP[k].keywords.some(kw => searchTxt.includes(kw));
+      if (hasKw) status[k] = true;
+    });
+  });
+  
+  let count = 0;
+  keys.forEach(k => {
+    const itemEl = document.getElementById(ACHIEVEMENT_MAP[k].id);
+    if (itemEl) {
+      if (status[k]) {
+        itemEl.classList.add('unlocked');
+        count++;
+      } else {
+        itemEl.classList.remove('unlocked');
+      }
+    }
+  });
+  
+  document.getElementById('tab-stamps-badge').textContent = `${count}/${keys.length}`;
+}
+
+function filterByStamp(stampKey) {
+  const itemEl = document.getElementById(ACHIEVEMENT_MAP[stampKey].id);
+  if (!itemEl || !itemEl.classList.contains('unlocked')) {
+    alert('此老屋印章尚未解鎖喔！去記錄一間有此特徵的咖啡廳吧 ☕');
+    return;
+  }
+  
+  const searchBox = document.getElementById('search-box');
+  if (activeStampFilter === stampKey) {
+    // Toggle filter off
+    activeStampFilter = '';
+    searchBox.value = '';
+    searchQuery = '';
+    document.getElementById('search-clear-btn').classList.remove('show');
+  } else {
+    // Toggle filter on
+    activeStampFilter = stampKey;
+    const kw = ACHIEVEMENT_MAP[stampKey].keywords[0]; // Filter by the first keyword
+    searchBox.value = kw;
+    searchQuery = kw.toLowerCase();
+    document.getElementById('search-clear-btn').classList.add('show');
+  }
+  
+  // Return to list tab if we were on stamp tab so user can see filtered list
+  switchTab('history');
+  applyFilters();
+}
+
+// ── Phase 2: Sticky Memo 保存 ────────────────────────
+function saveStickyContent() {
+  if (!_currentEntry) return;
+  const content = document.getElementById('r-sticky-content').textContent.trim();
+  _currentEntry.sticky = content;
+  saveEntry(_currentEntry);
+}
+
+// ── Phase 2: Web Audio API Ambient Sound Player ──────
+let audioCtx = null;
+let crackleNode = null;
+let noiseNode = null;
+let volumeNode = null;
+let isAmbientPlaying = false;
+let isAmbientMuted = false;
+
+function initAmbientAudio() {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  volumeNode = audioCtx.createGain();
+  // Low comfortable default volume
+  volumeNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
+  volumeNode.connect(audioCtx.destination);
+  
+  // 1. Generate Warm Muffled White Noise (Background cafe hum)
+  const bufferSize = 2 * audioCtx.sampleRate;
+  const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const output = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    output[i] = Math.random() * 2 - 1;
+  }
+  
+  noiseNode = audioCtx.createBufferSource();
+  noiseNode.buffer = noiseBuffer;
+  noiseNode.loop = true;
+  
+  // Lowpass filter at 380Hz to simulate heavy warm cafe background
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(380, audioCtx.currentTime);
+  
+  noiseNode.connect(filter);
+  filter.connect(volumeNode);
+  
+  // 2. Generate Vinyl Crackles (random warm impulses)
+  crackleNode = audioCtx.createScriptProcessor(4096, 0, 1);
+  crackleNode.onaudioprocess = function(e) {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      out[i] = 0;
+      // Probabilistic impulses
+      if (Math.random() < 0.00018) {
+        const crackleHeight = Math.random() * 0.35 + 0.1;
+        const decay = 0.92;
+        let val = crackleHeight;
+        for (let j = 0; j < 30 && (i + j) < out.length; j++) {
+          out[i + j] += val;
+          val *= decay;
+        }
+      }
+    }
+  };
+  
+  // Bandpass filter to make it sound like record dust
+  const crackleFilter = audioCtx.createBiquadFilter();
+  crackleFilter.type = 'bandpass';
+  crackleFilter.frequency.setValueAtTime(1200, audioCtx.currentTime);
+  crackleFilter.Q.setValueAtTime(2.0, audioCtx.currentTime);
+  
+  crackleNode.connect(crackleFilter);
+  crackleFilter.connect(volumeNode);
+}
+
+function toggleAmbientAudio() {
+  if (!audioCtx) {
+    try {
+      initAmbientAudio();
+    } catch (e) {
+      alert("您的瀏覽器不支援 Web Audio API，無法播放昭和背景音效。");
+      return;
+    }
+  }
+  
+  const container = document.getElementById('ambient-player');
+  if (isAmbientPlaying) {
+    audioCtx.suspend();
+    isAmbientPlaying = false;
+    container.classList.remove('playing');
+  } else {
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    } else {
+      noiseNode.start();
+    }
+    isAmbientPlaying = true;
+    container.classList.add('playing');
+  }
+}
+
+function toggleMuteAmbient() {
+  if (!audioCtx) return;
+  const volBtn = document.getElementById('btn-ambient-volume');
+  if (isAmbientMuted) {
+    volumeNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
+    volBtn.textContent = '🔊';
+    isAmbientMuted = false;
+  } else {
+    volumeNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    volBtn.textContent = '🔇';
+    isAmbientMuted = true;
   }
 }
 
