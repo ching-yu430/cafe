@@ -2763,7 +2763,6 @@ function saveStickyContent() {
 
 // ── Phase 2: Web Audio API Ambient Sound Player ──────
 let audioCtx = null;
-let crackleNode = null;
 let noiseNode = null;
 let volumeNode = null;
 let isAmbientPlaying = false;
@@ -2776,53 +2775,54 @@ function initAmbientAudio() {
   volumeNode.gain.setValueAtTime(0.12, audioCtx.currentTime);
   volumeNode.connect(audioCtx.destination);
   
-  // 1. Generate Warm Muffled White Noise (Background cafe hum)
-  const bufferSize = 2 * audioCtx.sampleRate;
-  const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const output = noiseBuffer.getChannelData(0);
+  // Create a 5-second buffer (pre-rendered loop) to avoid ScriptProcessor overload on mobile
+  const seconds = 5;
+  const sampleRate = audioCtx.sampleRate;
+  const bufferSize = sampleRate * seconds;
+  const ambientBuffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+  const data = ambientBuffer.getChannelData(0);
+  
+  // 1. Render warm white noise (Cafe base hum / rain)
   for (let i = 0; i < bufferSize; i++) {
-    output[i] = Math.random() * 2 - 1;
+    data[i] = (Math.random() * 2 - 1) * 0.12; 
   }
   
-  noiseNode = audioCtx.createBufferSource();
-  noiseNode.buffer = noiseBuffer;
-  noiseNode.loop = true;
-  
-  // Lowpass filter at 380Hz to simulate heavy warm cafe background
-  const filter = audioCtx.createBiquadFilter();
-  filter.type = 'lowpass';
-  filter.frequency.setValueAtTime(380, audioCtx.currentTime);
-  
-  noiseNode.connect(filter);
-  filter.connect(volumeNode);
-  
-  // 2. Generate Vinyl Crackles (random warm impulses)
-  crackleNode = audioCtx.createScriptProcessor(4096, 0, 1);
-  crackleNode.onaudioprocess = function(e) {
-    const out = e.outputBuffer.getChannelData(0);
-    for (let i = 0; i < out.length; i++) {
-      out[i] = 0;
-      // Probabilistic impulses
-      if (Math.random() < 0.00018) {
-        const crackleHeight = Math.random() * 0.35 + 0.1;
-        const decay = 0.92;
-        let val = crackleHeight;
-        for (let j = 0; j < 30 && (i + j) < out.length; j++) {
-          out[i + j] += val;
-          val *= decay;
-        }
+  // 2. Render vinyl crackles and pops directly into the buffer
+  const numCrackles = seconds * 8; // ~8 random cracks per second
+  for (let c = 0; c < numCrackles; c++) {
+    const pos = Math.floor(Math.random() * (bufferSize - 100));
+    const crackleHeight = Math.random() * 0.35 + 0.15;
+    const decay = 0.88;
+    let val = crackleHeight;
+    for (let j = 0; j < 40; j++) {
+      if (pos + j < bufferSize) {
+        // Overlay vinyl impulse with slight random noise modulation
+        data[pos + j] += (Math.random() * 2 - 1) * 0.1 * val + val;
+        val *= decay;
       }
     }
-  };
+  }
   
-  // Bandpass filter to make it sound like record dust
-  const crackleFilter = audioCtx.createBiquadFilter();
-  crackleFilter.type = 'bandpass';
-  crackleFilter.frequency.setValueAtTime(1200, audioCtx.currentTime);
-  crackleFilter.Q.setValueAtTime(2.0, audioCtx.currentTime);
+  // Create Source node
+  noiseNode = audioCtx.createBufferSource();
+  noiseNode.buffer = ambientBuffer;
+  noiseNode.loop = true;
   
-  crackleNode.connect(crackleFilter);
-  crackleFilter.connect(volumeNode);
+  // Filter 1: Lowpass filter to muffle noise. 
+  // Set to 600Hz so warm hum stays audible on tiny phone speakers.
+  const lpFilter = audioCtx.createBiquadFilter();
+  lpFilter.type = 'lowpass';
+  lpFilter.frequency.setValueAtTime(600, audioCtx.currentTime);
+  
+  // Filter 2: Highpass filter at 100Hz to remove sub-bass that distorts phone speakers.
+  const hpFilter = audioCtx.createBiquadFilter();
+  hpFilter.type = 'highpass';
+  hpFilter.frequency.setValueAtTime(100, audioCtx.currentTime);
+  
+  // Connect Audio Chain
+  noiseNode.connect(lpFilter);
+  lpFilter.connect(hpFilter);
+  hpFilter.connect(volumeNode);
 }
 
 function toggleAmbientAudio() {
